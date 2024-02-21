@@ -136,6 +136,9 @@
     <Filter Include="Resource Files\engine\font\min">
       <UniqueIdentifier>{1b103960-f11a-4515-b4f1-f59333ce00d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AssetReader">
+      <UniqueIdentifier>{224289da-c6da-44ed-9eeb-e9b079781c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -143,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetReader\AssetReader.cpp">
+      <Filter>AssetReader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -808,6 +814,9 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetReader\AssetReader.hpp">
+      <Filter>AssetReader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
