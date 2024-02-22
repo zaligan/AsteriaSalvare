@@ -39,7 +39,6 @@ bool AssetReader::registerAsset()
 		if (type == U"Texture")
 		{
 			TextureAsset::Register(assetName, path);
-			Print << U"TextureAsset";
 			continue;
 		}
 
