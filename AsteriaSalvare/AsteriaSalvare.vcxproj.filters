@@ -139,6 +139,9 @@
     <Filter Include="AssetReader">
       <UniqueIdentifier>{224289da-c6da-44ed-9eeb-e9b079781c9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{521161cc-b159-44a9-b20c-88d5ff3a5edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -287,6 +290,9 @@
     </Text>
     <Text Include="App\example\LICENSE.txt">
       <Filter>Resource Files\example</Filter>
+    </Text>
+    <Text Include="App\Asset\asset-list.tsv">
+      <Filter>Asset</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
@@ -870,6 +876,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Upgrade.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Anime.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,12 +1,12 @@
 ﻿#pragma once
 # include <Siv3D.hpp> // Siv3D v0.6.14
 
-/// @brief TSV形式のアセットリストを読み込み、アセットを登録します。
+/// @brief TSV形式のテキストファイルを読み込み、アセットを登録します。
 class AssetReader
 {
 public:
 	/// @brief assetPath から AssetReader を構築します。
-	/// @param assetPath asset のリストが記述されたファイルのパスです。
+	/// @param assetPath 登録するアセット情報が記述されたファイルのパスです。
 	AssetReader(const FilePath& assetPath);
 
 	/// @brief 初期化します。メイン関数の先頭で１度だけ呼び出してください。
@@ -20,9 +20,9 @@ public:
 	bool registerAsset();
 
 private:
-	/// @brief アセットリストのファイルのパスです。
+	/// @brief 参照するアセットリストのファイルのパスです。
 	FilePath m_assetPath;
 
-	/// @brief assetPath から読み込むTextReaderです。
+	/// @brief m_assetPath のファイルを読み込む TextReaderです。
 	TextReader m_reader;
 };

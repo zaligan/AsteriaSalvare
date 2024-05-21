@@ -155,6 +155,7 @@
     <ResourceCompile Include="App\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="App\Asset\asset-list.tsv" />
     <Text Include="App\dll\soundtouch\COPYING.TXT" />
     <Text Include="App\engine\font\fontawesome\LICENSE.txt" />
     <Text Include="App\engine\soundfont\GMGSx.sf2.txt" />
@@ -329,6 +330,7 @@
     <Xml Include="App\example\xml\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Anime.hpp" />
     <ClInclude Include="AssetReader\AssetReader.hpp" />
     <ClInclude Include="Bullet.hpp" />
     <ClInclude Include="Common.h" />

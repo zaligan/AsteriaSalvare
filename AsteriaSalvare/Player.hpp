@@ -104,8 +104,8 @@ public:
 				m_enhancedBulletID++;
 
 				m_enhancePoint = Max(m_enhancePoint- m_shotLostEnhancePoint,0.0);
-
-				AudioAsset(U"pShotAud").playOneShot();
+				//TODO:弾の音量設定を違う場所でする。
+				AudioAsset(U"pShotAud").playOneShot(0.1, 0, 1.0);
 			}
 		}
 		else
@@ -119,7 +119,8 @@ public:
 
 				bulletArr << Bullet{ Normal,0,Circle{getCenter(),pBulletR}, direction ,m_bulletDamage };
 
-				AudioAsset(U"pShotAud").playOneShot();
+				//TODO:弾の音量設定を違う場所でする。
+				AudioAsset(U"pShotAud").playOneShot(0.1,0,1.0);
 			}
 		}
 	}

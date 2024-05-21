@@ -8,6 +8,9 @@ Game::Game(const InitData& init)
 	{
 		throw Error{ U"Failed to load `EnemyDataSheat.csv`" };
 	}
+
+	//TODO:音量設定はここでいいのか？
+	AudioAsset(U"gameBGM").setVolume(0.1);
 }
 
 void Game::update()

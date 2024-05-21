@@ -8,7 +8,7 @@ bool AssetReader::init()
 	m_reader.open(m_assetPath);
 	if (not m_reader)
 	{
-		throw Error{ U"Asset/asset-list.txt could not be opened." };
+		throw Error{ U"'{}' could not be opened."_fmt(m_assetPath)};
 	}
 	return true;
 }
@@ -17,9 +17,10 @@ bool AssetReader::registerAsset()
 {
 	String line;
 
-	//アセットリストの読み込み
+	//ファイルの終端まで改行区切りでループ
 	while (m_reader.readLine(line))
 	{
+		//行をタブで分割した文字列の配列
 		const Array<String> items = line.split(U'\t');
 
 		//1行に含まれるアセットの情報が不正な場合
