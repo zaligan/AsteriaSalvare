@@ -100,7 +100,7 @@ private:
 	bool m_deathFlag = false;
 
 	/// @brief 破壊された時のアニメーションです
-	Anime m_explosionAnime{ TextureAsset(U"eExplosionTex"), 2, 8, 0.03,0.35,AudioAsset(U"eDeathAud") };
+	Anime m_explosionAnime{ TextureAsset(U"explosion"), 2, 8, 0.03,0.35,AudioAsset(U"enemyDeath") };
 
 	/// @brief 受けたプレイヤーの貫通弾の個別IDを記録します
 	Array<int32> m_hitEnhancedBulletArr;

@@ -13,7 +13,4 @@ public:
 	void draw() const override;
 
 private:
-
-	const Audio SelectAud_Push{ U"music/決定ボタンを押す23.mp3" };
-
 };

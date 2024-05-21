@@ -77,7 +77,7 @@ private:
 	static constexpr Circular townPosOffset{ 30,0 };
 
 	//CSVファイル
-	const CSV enemyCSV{ U"csv/EnemyDataSheat.csv" };
+	const CSV enemyCSV{ U"csv/EnemyDataSheet.csv" };
 	size_t index = 0;
 
 	double itemSpeed = 30.0;

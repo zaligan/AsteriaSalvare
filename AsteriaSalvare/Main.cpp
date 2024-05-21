@@ -1,8 +1,8 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.12
 # include"Common.hpp"
-# include "Scenes/Title.hpp" // タイトルシーン
-# include "Scenes/Game.hpp" // ゲームシーン
-# include "Utils/AssetReader/AssetReader.hpp"	//アセットを読み込むクラス
+# include "Title.hpp" // タイトルシーン
+# include "Game.hpp" // ゲームシーン
+# include "AssetReader/AssetReader.hpp"	//アセットを読み込むクラス
 
 void Main()
 {

@@ -34,7 +34,7 @@ public:
 			//強化時１度だけ鳴らす
 			if (!m_enhancedMode)
 			{
-				AudioAsset(U"playerEnhancedAud").playOneShot();
+				AudioAsset(U"playerEnhanced").playOneShot();
 			}
 			m_enhancedMode = true;
 		}
@@ -75,7 +75,7 @@ public:
 	/// @brief プレイヤーを描画します
 	void draw() const
 	{
-		TextureAsset(U"pJetTex").scaled(m_playerSize).rotated(m_pos.theta).drawAt(m_pos);
+		TextureAsset(U"player").scaled(m_playerSize).rotated(m_pos.theta).drawAt(m_pos);
 		if (m_shieldFlag)
 		{
 			shieldDraw(m_pos);
@@ -105,7 +105,7 @@ public:
 
 				m_enhancePoint = Max(m_enhancePoint- m_shotLostEnhancePoint,0.0);
 				//TODO:弾の音量設定を違う場所でする。
-				AudioAsset(U"pShotAud").playOneShot(0.1, 0, 1.0);
+				AudioAsset(U"playerShoot").playOneShot(0.1, 0, 1.0);
 			}
 		}
 		else
@@ -120,7 +120,7 @@ public:
 				bulletArr << Bullet{ Normal,0,Circle{getCenter(),pBulletR}, direction ,m_bulletDamage };
 
 				//TODO:弾の音量設定を違う場所でする。
-				AudioAsset(U"pShotAud").playOneShot(0.1,0,1.0);
+				AudioAsset(U"playerShoot").playOneShot(0.1,0,1.0);
 			}
 		}
 	}
@@ -219,7 +219,7 @@ public:
 	void shieldRestoreHP(double heal)
 	{
 		m_shieldCurrentHP += heal;
-		AudioAsset(U"shieldRestoreAud").playOneShot();
+		AudioAsset(U"shieldRestore").playOneShot();
 	}
 
 	void addEnhancePoint(double addPoint)
@@ -341,7 +341,7 @@ private:
 	static constexpr double m_shotLostEnhancePoint = 10.0;
 
 	//プレイヤー強化時のエフェクトです
-	Anime m_enhanceEffectAnime{ Point(4,1), TextureAsset(U"enhancedEffectTex"), 3, 5, 0.04, 0.5 };
+	Anime m_enhanceEffectAnime{ Point(4,1), TextureAsset(U"enhancedEffect"), 3, 5, 0.04, 0.5 };
 
 	//強化モード時の射撃間隔(秒)です
 	double m_enhancedShotCoolTime = 0.15;
@@ -377,7 +377,7 @@ private:
 	static constexpr double m_shieldRegenerationRate = 100.0;
 
 	//シールド使用時のアニメーションです
-	Anime m_shieldAnime{TextureAsset(U"shieldTex"), 4, 5, 0.03, m_shieldSize * 0.18 };
+	Anime m_shieldAnime{TextureAsset(U"shield"), 4, 5, 0.03, m_shieldSize * 0.18 };
 
 	//シールドの衝突範囲です
 	Circle m_shieldCollider{ m_shieldSize * 30.0 };

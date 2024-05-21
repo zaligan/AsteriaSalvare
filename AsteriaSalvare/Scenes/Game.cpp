@@ -9,8 +9,8 @@ Game::Game(const InitData& init)
 		throw Error{ U"Failed to load `EnemyDataSheat.csv`" };
 	}
 
-	//TODO:音量設定はここでいいのか？
-	AudioAsset(U"gameBGM").setVolume(0.1);
+	//TODO:音量設定はここでいいのか検討
+	AudioAsset(U"gameBgm").setVolume(0.1);
 }
 
 void Game::update()
@@ -46,7 +46,7 @@ void Game::update()
 	}
 
 	//BGM再生
-	AudioAsset(U"gameBGM").play();
+	AudioAsset(U"gameBgm").play();
 
 	//ゲームシーンになった時、操作方法を表示
 	if(showInstructionsFlag && !getData().testMode)
@@ -369,13 +369,13 @@ void Game::draw() const
 		const auto t0 = camera.createTransformer();
 		const Transformer2D t1{ mat,TransformCursor::Yes };
 
-		TextureAsset(U"backPic").scaled(1.0).drawAt(0, 0);
+		TextureAsset(U"gameBackGround").scaled(1.0).drawAt(0, 0);
 		//ステージ
 		earth.draw(Palette::Saddlebrown);
 		for (int i = 0; i < 100; i++)
 		{
 			double tileDeg = Math::Pi * 2 / 100 * i;
-			TextureAsset(U"earthTile").scaled(0.07).rotated(tileDeg).drawAt(OffsetCircular({ 0,0 }, StageInfo::earthR, tileDeg));
+			TextureAsset(U"ground").scaled(0.07).rotated(tileDeg).drawAt(OffsetCircular({ 0,0 }, StageInfo::earthR, tileDeg));
 		}
 
 		//街
@@ -385,7 +385,7 @@ void Game::draw() const
 			switch (townArr[i].getTownType())
 			{
 			case TownType::Nomal:
-				TextureAsset(U"townTex").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::earthR + townPosOffset.r, townRotate + townPosOffset.theta));
+				TextureAsset(U"town").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::earthR + townPosOffset.r, townRotate + townPosOffset.theta));
 				break;
 			case TownType::Attack:
 				break;
@@ -407,13 +407,13 @@ void Game::draw() const
 			switch (bullet.type)
 			{
 			case Normal:
-				TextureAsset(U"pBullet_tex").rotated(player.getTheta()).drawAt(bullet.collider.center);
+				TextureAsset(U"playerBullet").rotated(player.getTheta()).drawAt(bullet.collider.center);
 				break;
 			case Enhanced:
-				TextureAsset(U"pEnhancedBullet_tex").rotated(player.getTheta()-90_deg).drawAt(bullet.collider.center);
+				TextureAsset(U"playerEnhancedBullet").rotated(player.getTheta()-90_deg).drawAt(bullet.collider.center);
 				break;
 			case TownBullet:
-				TextureAsset(U"pBullet_tex").rotated(player.getTheta()).drawAt(bullet.collider.center);
+				TextureAsset(U"playerBullet").rotated(player.getTheta()).drawAt(bullet.collider.center);
 				break;
 			default:
 				TextureAsset(U"townTex").rotated(player.getTheta()).drawAt(bullet.collider.center);
@@ -428,7 +428,7 @@ void Game::draw() const
 		//敵弾
 		for (auto& eBullet : eBulletArr)
 		{
-			TextureAsset(U"eBullet_tex").drawAt(eBullet.collider.center);
+			TextureAsset(U"enemyBullet").drawAt(eBullet.collider.center);
 		}
 		//アイテム
 		for (auto& item : itemArr)
@@ -438,13 +438,13 @@ void Game::draw() const
 			switch (item.itemType)
 			{
 			case 0:
-				itemType = U"Attack_Item";
+				itemType = U"AttackUpgrade";
 				break;
 			case 1:
-				itemType = U"Protect_Item";
+				itemType = U"shieldUpgrade";
 				break;
 			case 2:
-				itemType = U"Special_Item";
+				itemType = U"specialUpgrade";
 				break;
 			default:
 				break;
@@ -499,9 +499,9 @@ void Game::draw() const
 			break;
 		}
 	}
-	TextureAsset(U"Attack_Item").scaled(0.05).drawAt(830, 980);
-	TextureAsset(U"Protect_Item").scaled(0.05).drawAt(930, 980);
-	TextureAsset(U"Special_Item").scaled(0.05).drawAt(1030, 980);
+	TextureAsset(U"AttackUpgrade").scaled(0.05).drawAt(830, 980);
+	TextureAsset(U"shieldUpgrade").scaled(0.05).drawAt(930, 980);
+	TextureAsset(U"specialUpgrade").scaled(0.05).drawAt(1030, 980);
 
 	//GameOver
 	switch (gameState)

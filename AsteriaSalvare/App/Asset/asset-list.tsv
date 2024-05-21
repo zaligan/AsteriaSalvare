@@ -1,26 +1,25 @@
-Texture	pJetTex	picture/Enemy/GalagianArtwork/raw/player/ship1.png
-Texture	backPic	picture/StarryBackPic.png
-Texture	townPic	picture/shiro_02_gray_roof_red.png
-Texture	shieldTex	picture/player/pipo-btleffect206_480.png
-Texture	enhancedEffectTex	picture/player/pipo-btleffect109b.png
-Texture	pBullet_tex	picture/Enemy/GalagianArtwork/raw/projectiles/shotsmall.png
-Texture	pEnhancedBullet_tex	picture/player/projectiles/shot9.png
-Texture	eBullet_tex	picture/Enemy/GalagianArtwork/raw/projectiles/shotoval.png
-Texture	enemy1_tex	picture/Enemy/GalagianArtwork/raw/enemies/kamikaze.png
-Texture	Attack_Item	picture/Item/book_01_red.png
-Texture	earthTile	picture/stage/maptile_jimen_sogen_02_center.png
-Texture	titlePic	picture/Title/AsteriaSalvare_TitlePic.png
-Texture	enemyTex	picture/Enemy/GalagianArtwork/raw/enemies/kamikaze.png
-Texture	Protect_Item	picture/Item/book_01_blue.png
-Texture	Special_Item	picture/Item/book_01_green.png
-Texture	eExplosionTex	picture/explosion.png
-Texture	townTex	picture/stage/shiro_02_gray_roof_blue.png
+Texture	player	picture/Enemy/GalagianArtwork/raw/player/ship1.png
+Texture	gameBackGround	picture/StarryBackPic.png
+Texture	town	picture/stage/shiro_02_gray_roof_blue.png
+Texture	shield	picture/player/pipo-btleffect206_480.png
+Texture	enhancedEffect	picture/player/pipo-btleffect109b.png
+Texture	playerBullet	picture/Enemy/GalagianArtwork/raw/projectiles/shotsmall.png
+Texture	playerEnhancedBullet	picture/player/projectiles/shot9.png
+Texture	enemyBullet	picture/Enemy/GalagianArtwork/raw/projectiles/shotoval.png
+Texture	enemy	picture/Enemy/GalagianArtwork/raw/enemies/kamikaze.png
+Texture	AttackUpgrade	picture/Item/book_01_red.png
+Texture	shieldUpgrade	picture/Item/book_01_blue.png
+Texture	specialUpgrade	picture/Item/book_01_green.png
+Texture	ground	picture/stage/maptile_jimen_sogen_02_center.png
+Texture	titleBackGround	picture/Title/AsteriaSalvare_TitlePic.png
+Texture	explosion	picture/explosion.png
 Texture	howToPlayTex	picture/howToPlay.png
-Audio	gameBGM	music/battleBGM.mp3
-Audio	pShotAud	music/player/se_pyun2.mp3
-Audio	shieldRestoreAud	music/player/shieldRestore.mp3
-Audio	playerEnhancedAud	music/player/playerEnhanced.mp3
-Audio	eDeathAud	music/maou_se_8bit12.mp3
+Audio	gameBgm	music/battleBGM.mp3
+Audio	playerShoot	music/player/se_pyun2.mp3
+Audio	shieldRestore	music/player/shieldRestore.mp3
+Audio	playerEnhanced	music/player/playerEnhanced.mp3
+Audio	enemyDeath	music/maou_se_8bit12.mp3
+Audio	titleButton	music/titleButton.mp3
 Font	townHPFont	font/DotGothic16/DotGothic16-Regular.ttf	18
 Font	titleFont	font/DotGothic16/DotGothic16-Regular.ttf	40
 Font	gameOverFont	font/DotGothic16/DotGothic16-Regular.ttf	52

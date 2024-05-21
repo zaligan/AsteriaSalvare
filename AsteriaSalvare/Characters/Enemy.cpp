@@ -22,7 +22,7 @@ void Enemy::draw() const
 	}
 	else
 	{
-		TextureAsset(U"enemyTex").rotated(m_pos.theta).drawAt(m_collider.center);
+		TextureAsset(U"enemy").rotated(m_pos.theta).drawAt(m_collider.center);
 	}
 }
 
