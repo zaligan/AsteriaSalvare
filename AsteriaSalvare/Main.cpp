@@ -1,5 +1,5 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.12
-# include"Common.h"
+# include"Common.hpp"
 # include "Title.hpp" // タイトルシーン
 # include "Game.hpp" // ゲームシーン
 # include "AssetReader/AssetReader.hpp"	//アセットを読み込むクラス
@@ -50,8 +50,7 @@ void Main()
 	//メインループ
 	while (System::Update())
 	{
-		//現在のシーンを実行
-		//シーンに実装された.update()次に.draw()の順で実行される
+		//シーンに実装された.update() 次に.draw()の順で実行される
 		if (not manager.update())
 		{
 			break;

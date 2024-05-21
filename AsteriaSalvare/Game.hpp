@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include"Anime.hpp"
-#include"Common.h"
+#include"Common.hpp"
 #include"Enemy.hpp"
 #include"HPBar.h"
 #include"Player.hpp"

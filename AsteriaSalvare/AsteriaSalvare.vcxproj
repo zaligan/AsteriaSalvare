@@ -333,7 +333,7 @@
     <ClInclude Include="Anime.hpp" />
     <ClInclude Include="AssetReader\AssetReader.hpp" />
     <ClInclude Include="Bullet.hpp" />
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="Common.hpp" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="HPBar.h" />
