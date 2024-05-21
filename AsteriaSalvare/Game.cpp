@@ -1,4 +1,4 @@
-﻿#include "Game.h"
+﻿#include "Game.hpp"
 
 // ゲームシーン
 Game::Game(const InitData& init)

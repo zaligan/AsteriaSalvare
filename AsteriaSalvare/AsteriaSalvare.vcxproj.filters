@@ -833,28 +833,13 @@
     <ClInclude Include="AssetReader\AssetReader.hpp">
       <Filter>AssetReader</Filter>
     </ClInclude>
-    <ClInclude Include="Common.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Figure.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="HPBar.h">
@@ -869,9 +854,6 @@
     <ClInclude Include="TexturedCollider.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Town.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -879,6 +861,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Anime.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

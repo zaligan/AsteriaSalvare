@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include"Anime.hpp"
 #include"Common.h"
-#include"Enemy.h"
+#include"Enemy.hpp"
 #include"HPBar.h"
 #include"Player.hpp"
 #include"StageInfo.hpp"
@@ -108,7 +108,7 @@ private:
 	static constexpr double minSpawnTheta = 0;
 
 
-	
+
 	struct Item
 	{
 		int itemType;

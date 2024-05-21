@@ -1,8 +1,8 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.12
 # include"Common.h"
-# include "Title.h" // タイトルシーン
-# include "Game.h" // ゲームシーン
-# include "AssetReader/AssetReader.hpp"
+# include "Title.hpp" // タイトルシーン
+# include "Game.hpp" // ゲームシーン
+# include "AssetReader/AssetReader.hpp"	//アセットを読み込むクラス
 
 void Main()
 {
@@ -40,8 +40,9 @@ void Main()
 
 
 	//----開発用----
-	//Gameシーンから開始する場合このコメントを外す
+	//Gameシーンから開始する場合、下の行のコメントを外す
 	manager.init(State::Game);
+
 	//調整用無敵モード、通常プレイ時はコメントアウト
 	manager.get()->testMode = true;
 
