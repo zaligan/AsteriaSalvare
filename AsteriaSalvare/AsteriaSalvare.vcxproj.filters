@@ -136,11 +136,20 @@
     <Filter Include="Resource Files\engine\font\min">
       <UniqueIdentifier>{1b103960-f11a-4515-b4f1-f59333ce00d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AssetReader">
-      <UniqueIdentifier>{224289da-c6da-44ed-9eeb-e9b079781c9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Asset">
       <UniqueIdentifier>{521161cc-b159-44a9-b20c-88d5ff3a5edb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{843ce446-f7b2-49fb-aeae-8becae58d1b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{a8540e6f-18c2-458f-9260-67f6d16485af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Charactors">
+      <UniqueIdentifier>{2b36fa2f-fc92-4d56-8781-4ccb8e1b06ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Stage">
+      <UniqueIdentifier>{97f0ef6b-9eca-47c4-9cb0-a4b91d75ff6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,17 +159,17 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetReader\AssetReader.cpp">
-      <Filter>AssetReader</Filter>
+    <ClCompile Include="Utils\AssetReader\AssetReader.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Scenes\Game.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Scenes\Title.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Characters\Enemy.cpp">
+      <Filter>Source Files\Charactors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -830,44 +839,44 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetReader\AssetReader.hpp">
-      <Filter>AssetReader</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Figure.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="HPBar.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Utils\AssetReader\AssetReader.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Player.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Scenes\Game.hpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="StageInfo.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Scenes\Title.hpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="TexturedCollider.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Utils\Anime.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Town.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Characters\Bullet.hpp">
+      <Filter>Source Files\Charactors</Filter>
     </ClInclude>
-    <ClInclude Include="Upgrade.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Characters\Enemy.hpp">
+      <Filter>Source Files\Charactors</Filter>
     </ClInclude>
-    <ClInclude Include="Anime.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Characters\Player.hpp">
+      <Filter>Source Files\Charactors</Filter>
     </ClInclude>
-    <ClInclude Include="Title.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Characters\Upgrade.hpp">
+      <Filter>Source Files\Charactors</Filter>
     </ClInclude>
-    <ClInclude Include="Game.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Utils\HPBar.h">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Common.hpp">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Stage\StageInfo.hpp">
+      <Filter>Source Files\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Town.hpp">
+      <Filter>Source Files\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Common.hpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
