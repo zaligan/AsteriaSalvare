@@ -4,22 +4,25 @@
 Game::Game(const InitData& init)
 	: IScene{ init }
 {
-	if (not enemyCSV) // もし読み込みに失敗したら
-	{
-		throw Error{ U"Failed to load `EnemyDataSheat.csv`" };
-	}
-
-	//TODO:音量設定はここでいいのか検討
 	AudioAsset(U"gameBgm").setVolume(0.1);
 }
 
 void Game::update()
 {
-	//一時停止用
+	//デバッグ用
+#if _DEBUG
+	if (KeyF1.down())
+	{
+		changeScene(State::Title);
+	}
 	if (KeyP.pressed())
 	{
 		return;
 	}
+#endif
+
+	//BGM再生
+	AudioAsset(U"gameBgm").play();
 
 	//ゲームの状態遷移
 	switch (gameState)
@@ -44,9 +47,6 @@ void Game::update()
 	default:
 		break;
 	}
-
-	//BGM再生
-	AudioAsset(U"gameBgm").play();
 
 	//ゲームシーンになった時、操作方法を表示
 	if(showInstructionsFlag && !getData().testMode)
@@ -113,7 +113,7 @@ void Game::update()
 	for (auto bulletIter = pBulletArr.begin(); bulletIter != pBulletArr.end();)
 	{
 		//移動
-		Vec2 update(bulletIter->direction * pBullet_speed * deltaTime);
+		Vec2 update(bulletIter->direction * PlayerBullet::speed * deltaTime);
 		Line trajectory{ bulletIter->collider.center,bulletIter->collider.center + update };
 		bulletIter->collider.setCenter(bulletIter->collider.center + update);
 
@@ -126,26 +126,27 @@ void Game::update()
 
 		//弾と敵の衝突処理
 		bool isHit = false;
-		for (auto enemyIter = eArr.begin(); enemyIter != eArr.end();)
+		auto& enemyArray = m_enemyManager.getEnemyArray();
+		for (auto enemyIter = enemyArray.begin(); enemyIter != enemyArray.end();)
 		{
 			if ((Geometry2D::Distance(trajectory, enemyIter->getCenter()) < bulletIter->collider.r + enemyIter->getCollider().r) && enemyIter->getHP() > 0)
 			{
 				switch (bulletIter->type)
 				{
-				case Normal:
+				case BulletType::Normal:
 					enemyIter->damage(bulletIter->damage);
 					bulletIter = pBulletArr.erase(bulletIter);
 					isHit = true;
 					break;
 
-				case Enhanced:
+				case BulletType::Enhanced:
 					if (!enemyIter->isHitThisBullet(bulletIter->ID))
 					{
 						enemyIter->damage(bulletIter->damage);
 					}
 					break;
 
-				case TownBullet:
+				case BulletType::Town:
 					enemyIter->damage(bulletIter->damage);
 					bulletIter = pBulletArr.erase(bulletIter);
 					isHit = true;
@@ -173,13 +174,14 @@ void Game::update()
 	//e弾VS Shield
 	if (player.isShieldAvailable())
 	{
-		for (auto it = eBulletArr.begin(); it != eBulletArr.end();)
+		auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
+		for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
 		{
-			if (it->type == BulletType::EnemyBullet && it->collider.intersects(player.getShieldCollider()))
+			if (it->type == BulletType::Enemy && it->collider.intersects(player.getShieldCollider()))
 			{
 				player.shieldDamage(it->damage);
 				player.addEnhancePoint(it->damage / 10);
-				it = eBulletArr.erase(it);
+				it = enemyBulletArray.erase(it);
 
 				continue;
 			}
@@ -189,25 +191,26 @@ void Game::update()
 
 
 	//--------------アップグレードアイテム-------------------
-	for (auto it = itemArr.begin(); it != itemArr.end();)
-	{
-		//アイテムの移動
-		if (it->pos.r > StageInfo::earthR)
-		{
-			it->pos.r -= itemSpeed * deltaTime;
-		}
+	//Array<Item> itemArr = m_itemManager.getItemArray();
+	//for (auto it = itemArr.begin(); it != itemArr.end();)
+	//{
+	//	//アイテムの移動
+	//	if (it->pos.r > StageInfo::earthR)
+	//	{
+	//		it->pos.r -= itemSpeed * deltaTime;
+	//	}
 
-		//衝突判定（プレイヤー）
-		Vec2 rectPos = OffsetCircular({ 0,0 }, it->pos);
-		Rect collider{ Arg::center(lround(rectPos.x),lround(rectPos.y)) ,20,20 };
-		if (collider.intersects(player.getCollider()))
-		{
-			player.addOnePointUpgrade(it->itemType);
-			it = itemArr.erase(it);
-			continue;
-		}
-		it++;
-	}
+	//	//衝突判定（プレイヤー）
+	//	Vec2 rectPos = OffsetCircular({ 0,0 }, it->pos);
+	//	Rect collider{ Arg::center(lround(rectPos.x),lround(rectPos.y)) ,20,20 };
+	//	if (collider.intersects(player.getCollider()))
+	//	{
+	//		player.addOnePointUpgrade(it->itemType);
+	//		it = itemArr.erase(it);
+	//		continue;
+	//	}
+	//	it++;
+	//}
 	for (auto& town:townArr)
 	{
 		if (town.getCollider().intersects(player.getCollider()))
@@ -218,68 +221,24 @@ void Game::update()
 	}
 
 	//---------------Enemy処理-----------------
-
-	//ランダムスポーン
-	eSpawnTimer += deltaTime;
-	if (eSpawnTimer > spawnIntervalSeconds)
-	{
-		eSpawnTimer -= spawnIntervalSeconds;
-		for(int i:step(enemySpawnCalc(sceneTime)))
+	/*アイテムドロップ
+	int32 itemDropChance = Random(0, 99);
+		if (itemDropChance % 10 < 3)
 		{
-			const double r = Random(minSpawnR,maxSpawnR );
-			const double theta = Math::ToRadians(Random(minSpawnTheta, maxSpawnTheta));
-			eArr << Enemy{ r, theta };
+			//ItemArray.push_back的な感じで要素を追加する
+			itemArr << Item{ itemDropChance % 10,it->getCenter() };
 		}
-	}
+	*/
 
-	//TODO:CSVファイルが1行の時エラー,sceneTimeが100以上の時エラー
-	//CSVスポーン １行目は項目のためスルー
-	/*while (index + 2 <= enemyCSV.rows())
-	{
-		if (Parse<int32>(enemyCSV[index + 1][0]) < sceneTime)
-		{
-			const double r = Parse<double>(enemyCSV[index + 1][1]);
-			const double theta = Math::ToRadians(Parse<double>(enemyCSV[index + 1][2]));
-			eArr << Enemy{ r, theta };
-			index++;
-		}
-		else
-		{
-			break;
-		}
-	}*/
 
-	//e本体処理
-	for (auto it = eArr.begin(); it != eArr.end();)
-	{
-		if (it->isDeath())
-		{
-			int32 itemDropChance = Random(0, 99);
-			if (itemDropChance % 10 < 3)
-			{
-				itemArr << Item{ itemDropChance % 10,it->getCenter()};
-			}
-			it = eArr.erase(it);
-			continue;
-		}
-		//移動処理
-		it->update();
-		//発射処理
-		it->shot(eBulletArr, player.getCenter());
-
-		++it;
-	}
+	
 	//E弾処理
-	//移動処理
-	for (auto& bullet : eBulletArr)
-	{
-		Vec2 update(bullet.direction * eBulletSpeed * deltaTime);
-		bullet.collider.setCenter(bullet.collider.center + update);
-	}
+
 	//e弾hit
-	for (auto it = eBulletArr.begin(); it != eBulletArr.end();)
+	auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
+	for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
 	{
-		bool exsit = false;
+		bool exist = false;
 		for (auto i : step(townArr.size()))
 		{
 			if (it->collider.intersects(townArr[i].getCollider()))
@@ -288,12 +247,12 @@ void Game::update()
 				{
 					townArr[i].damage(it->damage);
 				}
-				it = eBulletArr.erase(it);
-				exsit = true;
+				it = enemyBulletArray.erase(it);
+				exist = true;
 				break;
 			}
 		}
-		if (exsit)
+		if (exist)
 		{
 			continue;
 		}
@@ -304,14 +263,14 @@ void Game::update()
 			{
 				player.damage(it->damage);
 			}
-			it = eBulletArr.erase(it);
+			it = enemyBulletArray.erase(it);
 		}
 
 		else
 		{
 			if (it->collider.intersects(earth))
 			{
-				it = eBulletArr.erase(it);
+				it = enemyBulletArray.erase(it);
 			}
 			else
 			{
@@ -319,9 +278,7 @@ void Game::update()
 			}
 		}
 	}
-	//範囲外の弾は削除
-	eBulletArr.remove_if([](const Bullet& b) {return (b.collider.x < -StageInfo::bulletDeleteRange) || (b.collider.x > StageInfo::bulletDeleteRange) || (b.collider.y < -StageInfo::bulletDeleteRange) || (b.collider.y > StageInfo::bulletDeleteRange); });
-
+	
 	//town更新
 	for (size_t i = 0; i < townArr.size(); ++i)
 	{
@@ -406,13 +363,13 @@ void Game::draw() const
 		{
 			switch (bullet.type)
 			{
-			case Normal:
+			case BulletType::Normal:
 				TextureAsset(U"playerBullet").rotated(player.getTheta()).drawAt(bullet.collider.center);
 				break;
-			case Enhanced:
+			case BulletType::Enhanced:
 				TextureAsset(U"playerEnhancedBullet").rotated(player.getTheta()-90_deg).drawAt(bullet.collider.center);
 				break;
-			case TownBullet:
+			case BulletType::Town:
 				TextureAsset(U"playerBullet").rotated(player.getTheta()).drawAt(bullet.collider.center);
 				break;
 			default:
@@ -421,17 +378,11 @@ void Game::draw() const
 			}
 		}
 		//敵
-		for (auto& enemy : eArr)
-		{
-			enemy.draw();
-		}
+		m_enemyManager.enemyDraw();
 		//敵弾
-		for (auto& eBullet : eBulletArr)
-		{
-			TextureAsset(U"enemyBullet").drawAt(eBullet.collider.center);
-		}
+		m_enemyManager.enemyBulletDraw();
 		//アイテム
-		for (auto& item : itemArr)
+		/*for (auto& item : itemArr)
 		{
 
 			String itemType;
@@ -450,7 +401,7 @@ void Game::draw() const
 				break;
 			}
 			TextureAsset(itemType).scaled(0.04).rotated(item.pos.theta).drawAt(OffsetCircular({ 0,0 }, item.pos));
-		}
+		}*/
 	}
 
 	//-------UI------------

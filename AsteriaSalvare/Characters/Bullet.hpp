@@ -2,7 +2,7 @@
 # include <Siv3D.hpp>
 
 //弾の種類を表します
-enum BulletType
+enum class BulletType
 {
 	//プレイヤーの普通の弾
 	Normal,
@@ -11,10 +11,10 @@ enum BulletType
 	Enhanced,
 
 	//敵の弾
-	EnemyBullet,
+	Enemy,
 
 	//街の弾
-	TownBullet
+	Town
 };
 
 //敵とプレイヤーの弾のクラスです
@@ -37,10 +37,16 @@ struct Bullet
 };
 
 /// @brief プレイヤーの弾速
-static constexpr double pBullet_speed = 400.0;
-constexpr double pBulletR = 6.0;
-constexpr double pEnhancedBulletR = 9.0;
+namespace PlayerBullet
+{
+	static constexpr double size = 6.0;
+	static constexpr double speed = 400.0;
+	static constexpr double enhancedBulletSize = 9.0;
+}
 
-constexpr double eBulletR = 4.0;
-constexpr double eBulletSpeed = 40.0;
+namespace EnemyBullet
+{
+	static constexpr double size = 4.0;
+	static constexpr double speed = 40.0;
+}
 

@@ -1,11 +1,13 @@
 ﻿#pragma once
-#include"Anime.hpp"
-#include"Common.hpp"
-#include"Enemy.hpp"
-#include"HPBar.h"
-#include"Player.hpp"
-#include"StageInfo.hpp"
-#include"Town.hpp"
+# include "Anime.hpp"
+# include "Common.hpp"
+# include "Enemy.hpp"
+# include "EnemyManager.hpp"
+# include "ItemManager.hpp"
+# include "HPBar.h"
+# include "Player.hpp"
+# include "StageInfo.hpp"
+# include "Town.hpp"
 
 // ゲームシーン
 class Game : public App::Scene
@@ -76,46 +78,11 @@ private:
 	/// @brief 衝突範囲とテクスチャを合わせるオフセット値です
 	static constexpr Circular townPosOffset{ 30,0 };
 
-	//CSVファイル
-	const CSV enemyCSV{ U"csv/EnemyDataSheet.csv" };
-	size_t index = 0;
-
 	double itemSpeed = 30.0;
 
-	//Enemy
-	Array <Enemy> eArr;
-	Array <Bullet> eBulletArr;
+	EnemyManger m_enemyManager{ player };
 
-	//敵をスポーンさせる時間間隔です
-	static constexpr double spawnIntervalSeconds = 1.0;
-
-	//spawnIntervalSecondsごとに出現させる敵の数です
-	int32 enemySpawnCalc(double currentTime)
-	{
-		return 5;
-	}
-	static constexpr int32 baseSpawnNum = 1;
-
-	//敵のスポーン時間を管理します
-	double eSpawnTimer = 0;
-
-	//敵が出現する地表からの距離範囲です
-	static constexpr double maxSpawnR = 330;
-	static constexpr double minSpawnR = 310;
-
-	//敵が出現する角度成分(度数法)です
-	static constexpr double maxSpawnTheta = 360;
-	static constexpr double minSpawnTheta = 0;
-
-
-
-	struct Item
-	{
-		int itemType;
-		Circular pos;
-	};
-
-	Array <Item> itemArr;
+	ItemManager m_itemManager;
 
 	// 2D カメラ
 	const double cameraScale = 2.0;

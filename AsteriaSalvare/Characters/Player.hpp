@@ -99,7 +99,7 @@ public:
 
 				Vec2 direction = Vec2(Circular{ 1,getTheta() }).normalized();
 
-				bulletArr << Bullet{ Enhanced,m_enhancedBulletID,Circle{getCenter(),pEnhancedBulletR}, direction ,m_enhancedBulletDamage };
+				bulletArr << Bullet{ BulletType::Enhanced,m_enhancedBulletID,Circle{getCenter(),PlayerBullet::enhancedBulletSize}, direction ,m_enhancedBulletDamage };
 
 				m_enhancedBulletID++;
 
@@ -117,7 +117,7 @@ public:
 
 				Vec2 direction = Vec2(Circular{ 1,getTheta() }).normalized();
 
-				bulletArr << Bullet{ Normal,0,Circle{getCenter(),pBulletR}, direction ,m_bulletDamage };
+				bulletArr << Bullet{ BulletType::Normal,0,Circle{getCenter(),PlayerBullet::size}, direction ,m_bulletDamage };
 
 				//TODO:弾の音量設定を違う場所でする。
 				AudioAsset(U"playerShoot").playOneShot(0.1,0,1.0);

@@ -75,7 +75,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BuildStlModules>false</BuildStlModules>
-      <AdditionalIncludeDirectories>Utils;Scenes;Stage;Characters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Utils;Scenes;Stage;Characters;Item;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -103,7 +103,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BuildStlModules>false</BuildStlModules>
-      <AdditionalIncludeDirectories>Utils;Scenes;Stage;Characters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Utils;Scenes;Stage;Characters;Item;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -118,6 +118,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Characters\Enemy.cpp" />
+    <ClCompile Include="Characters\EnemyManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\Game.cpp" />
     <ClCompile Include="Scenes\Title.cpp" />
@@ -334,9 +335,11 @@
   <ItemGroup>
     <ClInclude Include="Characters\Bullet.hpp" />
     <ClInclude Include="Characters\Enemy.hpp" />
+    <ClInclude Include="Characters\EnemyManager.hpp" />
     <ClInclude Include="Characters\Player.hpp" />
-    <ClInclude Include="Characters\Upgrade.hpp" />
     <ClInclude Include="Figure.h" />
+    <ClInclude Include="Item\Item.hpp" />
+    <ClInclude Include="Item\ItemManager.hpp" />
     <ClInclude Include="Scenes\Common.hpp" />
     <ClInclude Include="Scenes\Game.hpp" />
     <ClInclude Include="Scenes\Title.hpp" />

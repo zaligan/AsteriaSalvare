@@ -18,7 +18,7 @@ Audio	gameBgm	music/battleBGM.mp3
 Audio	playerShoot	music/player/se_pyun2.mp3
 Audio	shieldRestore	music/player/shieldRestore.mp3
 Audio	playerEnhanced	music/player/playerEnhanced.mp3
-Audio	enemyDeath	music/maou_se_8bit12.mp3
+Audio	enemyDead	music/maou_se_8bit12.mp3
 Audio	titleButton	music/titleButton.mp3
 Font	townHPFont	font/DotGothic16/DotGothic16-Regular.ttf	18
 Font	titleFont	font/DotGothic16/DotGothic16-Regular.ttf	40

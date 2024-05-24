@@ -151,6 +151,9 @@
     <Filter Include="Source Files\Stage">
       <UniqueIdentifier>{97f0ef6b-9eca-47c4-9cb0-a4b91d75ff6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Item">
+      <UniqueIdentifier>{0b52f828-0da3-47f0-8ccd-4d7c2fe576b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -169,6 +172,9 @@
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Characters\Enemy.cpp">
+      <Filter>Source Files\Charactors</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters\EnemyManager.cpp">
       <Filter>Source Files\Charactors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -863,9 +869,6 @@
     <ClInclude Include="Characters\Player.hpp">
       <Filter>Source Files\Charactors</Filter>
     </ClInclude>
-    <ClInclude Include="Characters\Upgrade.hpp">
-      <Filter>Source Files\Charactors</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\HPBar.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -877,6 +880,15 @@
     </ClInclude>
     <ClInclude Include="Scenes\Common.hpp">
       <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\EnemyManager.hpp">
+      <Filter>Source Files\Charactors</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\Item.hpp">
+      <Filter>Source Files\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\ItemManager.hpp">
+      <Filter>Source Files\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

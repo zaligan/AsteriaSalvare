@@ -28,9 +28,10 @@ void Enemy::draw() const
 
 void Enemy::update()
 {
+	//死亡時のアニメーションが死亡フラグをたてる
 	if (m_currentHP <= 0)
 	{
-		m_deathFlag = m_explosionAnime.update();
+		m_deadFlag = m_explosionAnime.update();
 	}
 	
 	//移動
@@ -38,6 +39,8 @@ void Enemy::update()
 	m_pos.r = Math::Lerp(m_from.r, m_to.r, t);
 	m_pos.theta = Math::LerpAngle(m_from.theta, m_to.theta, t);
 	m_collider.setPos(m_pos);
+
+
 }
 
 bool Enemy::damage(double damage)
@@ -51,7 +54,7 @@ double Enemy::getHP() const
 	return m_currentHP;
 }
 
-bool Enemy::shot(Array<Bullet>& eBulletArr, const Vec2& pJetPos)
+bool Enemy::shot(Array<Bullet>& enemyBulletArray, const Vec2& playerPosition)
 {
 	//eShotCoolTime経過するごとに発射
 	if (stopwatch.sF() > m_eShotCoolTime * (m_shotCnt + 1))
@@ -59,26 +62,27 @@ bool Enemy::shot(Array<Bullet>& eBulletArr, const Vec2& pJetPos)
 		m_shotCnt++;
 
 		//プレイヤーまでのベクトル
-		const Vec2 directPJet = pJetPos - getCenter();
+		const Vec2 toPlayer = playerPosition - getCenter();
 		//街までのベクトル
-		const Vec2 directTown = OffsetCircular({ 0,0 }, StageInfo::earthR, ((static_cast<int>((m_pos.theta + (Math::HalfPi / 2)) / Math::HalfPi) % 4) * Math::HalfPi)) - getCollider().center;
-		//
+		const Vec2 toTown = OffsetCircular({ 0,0 }, StageInfo::earthR, ((static_cast<int>((m_pos.theta + (Math::HalfPi / 2)) / Math::HalfPi) % 4) * Math::HalfPi)) - getCollider().center;
+		//弾が発射される方向
 		Vec2 direction = {0,0};
+
 		//プレイヤーと街の近いほうを狙う
-		if (directTown.lengthSq() < directPJet.lengthSq())
+		if (toTown.lengthSq() < toPlayer.lengthSq())
 		{
-			direction = directTown.normalized();
+			direction = toTown.normalized();
 		}
 		else
 		{
-			direction = directPJet.normalized();
+			direction = toPlayer.normalized();
 		}
 		if (direction.isZero())
 		{
 			direction = Vec2{ 0,1 };
 		}
 
-		eBulletArr << Bullet{ EnemyBullet,0, Circle{Arg::center(getCenter()),eBulletR},direction ,m_bulletDamage };
+		enemyBulletArray << Bullet{ BulletType::Enemy,0, Circle{Arg::center(getCenter()),EnemyBullet::size},direction ,m_bulletDamage };
 //----------------------------
 		return true;
 	}
@@ -90,9 +94,9 @@ Circle Enemy::getCollider() const
 	return m_collider;
 }
 
-bool Enemy::isDeath() const
+bool Enemy::isDead() const
 {
-	return m_deathFlag;
+	return m_deadFlag;
 }
 
 Circular Enemy::getCenter() const

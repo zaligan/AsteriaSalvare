@@ -42,11 +42,11 @@ public:
 	/// @param eBulletArr 敵のBulletを管理する配列です
 	/// @param pJetPos プレイヤーの座標です
 	/// @return 弾を発射したら,trueを返します
-	bool shot(Array<Bullet>& eBulletArr, const Vec2& pJetPos);
+	bool shot(Array<Bullet>& enemyBulletArray, const Vec2& pJetPos);
 
 	/// @brief 敵の生死を返します
 	/// @return 敵が死んでいる時,true
-	bool isDeath() const;
+	bool isDead() const;
 
 	/// @brief 衝突判定のためのCircleを返します。
 	/// @return 衝突判定のためのCircle
@@ -97,10 +97,10 @@ private:
 	static constexpr double m_enemyHouseRange = StageInfo::enemyHouseRange;
 
 	/// @brief 自身の体力が０以下の時,trueとなります
-	bool m_deathFlag = false;
+	bool m_deadFlag = false;
 
 	/// @brief 破壊された時のアニメーションです
-	Anime m_explosionAnime{ TextureAsset(U"explosion"), 2, 8, 0.03,0.35,AudioAsset(U"enemyDeath") };
+	Anime m_explosionAnime{ TextureAsset(U"explosion"), 2, 8, 0.03,0.35,AudioAsset(U"enemyDead") };
 
 	/// @brief 受けたプレイヤーの貫通弾の個別IDを記録します
 	Array<int32> m_hitEnhancedBulletArr;
