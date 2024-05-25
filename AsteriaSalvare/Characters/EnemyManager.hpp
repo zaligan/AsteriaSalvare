@@ -25,9 +25,7 @@ public:
 		return m_enemyBulletArray;
 	}
 
-	/// @brief 死亡している敵を配列から削除します
-	/// @return 削除した敵の座標
-	Array<Vec2> removeDeadEnemies();
+	Array<Vec2> getDeadEnemyPosition();
 
 private:
 	/// @brief 敵の生成を行います
@@ -35,7 +33,8 @@ private:
 
 	void bulletUpdate();
 
-	
+	/// @brief 死亡している敵を配列から削除します
+	void removeDeadEnemies();
 
 	/// @brief 経過時間に応じてスポーンさせる敵の数を計算します
 	/// @param currentTime ゲームシーン開始からの経過時間
@@ -52,7 +51,10 @@ private:
 
 	//Enemy
 	Array <Enemy> m_enemyArray;
+
 	Array <Bullet> m_enemyBulletArray;
+
+	Array <Vec2> m_deadEnemyPosition;
 
 	//敵のスポーン時間を管理します
 	double m_spawnTimer = 0;

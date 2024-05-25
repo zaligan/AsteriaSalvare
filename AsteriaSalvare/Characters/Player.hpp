@@ -3,16 +3,14 @@
 #include "Anime.hpp"
 #include "Bullet.hpp"
 #include "StageInfo.hpp"
-#include "Upgrade.hpp"
+#include "Item.hpp"
+#include "Volume.hpp"
 
 class Player
 {
 public:
-
-	Player();
 	/// @brief プレイヤーを作成します
-	/// @param playerSize プレイヤーのサイズを指定します
-	Player(double playerSize):m_playerSize(playerSize){};
+	Player() {};
 
 	/// @brief フレーム時間に合わせて更新します
 	/// @param deltaTime フレーム時間を渡します
@@ -104,8 +102,8 @@ public:
 				m_enhancedBulletID++;
 
 				m_enhancePoint = Max(m_enhancePoint- m_shotLostEnhancePoint,0.0);
-				//TODO:弾の音量設定を違う場所でする。
-				AudioAsset(U"playerShoot").playOneShot(0.1, 0, 1.0);
+				
+				AudioAsset(U"playerShoot").playOneShot(Volume::playerShot, 0, 1.0);
 			}
 		}
 		else
@@ -119,8 +117,7 @@ public:
 
 				bulletArr << Bullet{ BulletType::Normal,0,Circle{getCenter(),PlayerBullet::size}, direction ,m_bulletDamage };
 
-				//TODO:弾の音量設定を違う場所でする。
-				AudioAsset(U"playerShoot").playOneShot(0.1,0,1.0);
+				AudioAsset(U"playerShoot").playOneShot(Volume::playerShot,0,1.0);
 			}
 		}
 	}
@@ -229,35 +226,27 @@ public:
 
 	/// @brief アップグレードアイテムの所持数を加算
 	/// @param itemType アップグレードの種類
-	void addOnePointUpgrade(int32 itemType)
+	void addOnePointUpgrade(ItemType itemType)
 	{
-		switch (itemType)
-		{
-		case 0:
-			m_upgrade.Attack++;
-			break;
-		case 1:
-			m_upgrade.Defense++;
-			break;
-		case 2:
-			m_upgrade.Special++;
-			break;
-		default:
-			break;
-		}
+		m_itemCollection[itemType]++;
 	}
 
 	/// @brief 所持アップグレード数をすべて0にする
 	void resetUpgrade()
 	{
-		m_upgrade = { 0,0,0 };
+		m_itemCollection =
+		{
+			{ItemType::AttackUpgrade,0},
+			{ItemType::ShieldUpgrade,0},
+			{ItemType::SpecialUpgrade,0}
+		};
 	}
 
 	/// @brief 所持アップグレード数を返します
 	/// @return 所持アップグレード数
-	Upgrade getUpgradeCnt() const
+	HashTable<ItemType, int32> getUpgradeCnt() const
 	{
-		return m_upgrade;
+		return m_itemCollection;
 	}
 
 
@@ -283,10 +272,7 @@ private:
 	double m_deltaTime = 0;
 
 	//プレイヤーの中心座標(半径、回転角)です
-	Circular m_pos{ StageInfo::earthR,0 };
-
-	//プレイヤーのサイズです
-	double m_playerSize = 1.0;
+	Circular m_pos{ StageInfo::stageRadius,0 };
 
 	//プレイヤーの衝突範囲です
 	Circle m_collider{ 0,0,m_playerSize * 10 };
@@ -297,7 +283,7 @@ private:
 		double minRadius;
 		double maxRadius;
 	};
-	static constexpr MoveRange m_moveRange{ 100,StageInfo::earthR + 200 };
+	static constexpr MoveRange m_moveRange{ 100,StageInfo::stageRadius + 200 };
 
 	//上下方向の移動速度です
 	static constexpr double m_vertSpeed = 200.0;
@@ -307,6 +293,9 @@ private:
 	static constexpr double m_maxRotateSpeed = 3.0;
 	//プレイヤーが,maxRadiusにいる時１周にかかる秒数
 	static constexpr double m_minRotateSpeed = 18.0;
+
+	/// @brief プレイヤーの大きさ
+	static constexpr double m_playerSize = 1.3;
 
 	//プレイヤーの最大体力です
 	static constexpr double m_maxHP = 1.0;
@@ -347,7 +336,12 @@ private:
 	double m_enhancedShotCoolTime = 0.15;
 
 	//アップグレードアイテム
-	Upgrade m_upgrade;
+	HashTable<ItemType,int32> m_itemCollection =
+	{
+		{ItemType::AttackUpgrade,0},
+		{ItemType::ShieldUpgrade,0},
+		{ItemType::SpecialUpgrade,0},
+	};
 //-------弾--------------------
 
 	//通常時の弾の威力

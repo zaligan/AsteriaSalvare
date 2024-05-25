@@ -890,5 +890,8 @@
     <ClInclude Include="Item\ItemManager.hpp">
       <Filter>Source Files\Item</Filter>
     </ClInclude>
+    <ClInclude Include="Volume.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

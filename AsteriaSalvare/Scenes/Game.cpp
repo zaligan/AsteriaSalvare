@@ -27,17 +27,17 @@ void Game::update()
 	//ゲームの状態遷移
 	switch (gameState)
 	{
-	case Game::play:
+	case GameState::play:
 		break;
 
-	case Game::gameOver:
+	case GameState::gameOver:
 		if (shotInput.down())
 		{
 			changeScene(State::Title);
 		}
 		return;
 
-	case Game::clear:
+	case GameState::clear:
 		if (shotInput.down())
 		{
 			changeScene(State::Title);
@@ -65,11 +65,11 @@ void Game::update()
 	//状況に応じてゲームの状態を変更
 	if (sceneTime > clearTime && !getData().testMode)
 	{
-		gameState = clear;
+		gameState = GameState::clear;
 	}
 	if (player.getHP() <= 0)
 	{
-		gameState = gameOver;
+		gameState = GameState::gameOver;
 	}
 
 
@@ -105,12 +105,12 @@ void Game::update()
 
 	if (shotInput.pressed() && !shieldInput.pressed())
 	{
-		player.shot(pBulletArr);
+		player.shot(playerBulletArray);
 	}
 	
 
 	//弾の更新
-	for (auto bulletIter = pBulletArr.begin(); bulletIter != pBulletArr.end();)
+	for (auto bulletIter = playerBulletArray.begin(); bulletIter != playerBulletArray.end();)
 	{
 		//移動
 		Vec2 update(bulletIter->direction * PlayerBullet::speed * deltaTime);
@@ -120,7 +120,7 @@ void Game::update()
 		//弾自身が範囲外なら削除
 		if (bulletIter->collider.x < -StageInfo::bulletDeleteRange || StageInfo::bulletDeleteRange < bulletIter->collider.x || bulletIter->collider.y < -StageInfo::bulletDeleteRange || bulletIter->collider.y > StageInfo::bulletDeleteRange)
 		{
-			bulletIter = pBulletArr.erase(bulletIter);
+			bulletIter = playerBulletArray.erase(bulletIter);
 			continue;
 		}
 
@@ -135,7 +135,7 @@ void Game::update()
 				{
 				case BulletType::Normal:
 					enemyIter->damage(bulletIter->damage);
-					bulletIter = pBulletArr.erase(bulletIter);
+					bulletIter = playerBulletArray.erase(bulletIter);
 					isHit = true;
 					break;
 
@@ -148,7 +148,7 @@ void Game::update()
 
 				case BulletType::Town:
 					enemyIter->damage(bulletIter->damage);
-					bulletIter = pBulletArr.erase(bulletIter);
+					bulletIter = playerBulletArray.erase(bulletIter);
 					isHit = true;
 					break;
 
@@ -168,6 +168,14 @@ void Game::update()
 		}
 	}
 
+	//敵の更新
+	m_enemyManager.update(deltaTime);
+
+	//倒した敵からアイテムをドロップ
+	m_itemManager.dropEnemyItem(m_enemyManager.getDeadEnemyPosition());
+
+	//ステージ上のアイテムを更新
+	m_itemManager.update(deltaTime);
 
 	//-------------シールド処理------------------
 	
@@ -191,27 +199,21 @@ void Game::update()
 
 
 	//--------------アップグレードアイテム-------------------
-	//Array<Item> itemArr = m_itemManager.getItemArray();
-	//for (auto it = itemArr.begin(); it != itemArr.end();)
-	//{
-	//	//アイテムの移動
-	//	if (it->pos.r > StageInfo::earthR)
-	//	{
-	//		it->pos.r -= itemSpeed * deltaTime;
-	//	}
-
-	//	//衝突判定（プレイヤー）
-	//	Vec2 rectPos = OffsetCircular({ 0,0 }, it->pos);
-	//	Rect collider{ Arg::center(lround(rectPos.x),lround(rectPos.y)) ,20,20 };
-	//	if (collider.intersects(player.getCollider()))
-	//	{
-	//		player.addOnePointUpgrade(it->itemType);
-	//		it = itemArr.erase(it);
-	//		continue;
-	//	}
-	//	it++;
-	//}
-	for (auto& town:townArr)
+	Array<StageItem>& itemArray = m_itemManager.getStageItem();
+	for (auto it = itemArray.begin(); it != itemArray.end();)
+	{
+		//衝突判定（プレイヤー）
+		Vec2 rectPos = OffsetCircular({ 0,0 }, it->position);
+		Rect collider{ Arg::center(lround(rectPos.x),lround(rectPos.y)) ,20,20 };
+		if (collider.intersects(player.getCollider()))
+		{
+			player.addOnePointUpgrade(it->itemType);
+			it = itemArray.erase(it);
+			continue;
+		}
+		it++;
+	}
+	for (auto& town:townArray)
 	{
 		if (town.getCollider().intersects(player.getCollider()))
 		{
@@ -220,18 +222,6 @@ void Game::update()
 		}
 	}
 
-	//---------------Enemy処理-----------------
-	/*アイテムドロップ
-	int32 itemDropChance = Random(0, 99);
-		if (itemDropChance % 10 < 3)
-		{
-			//ItemArray.push_back的な感じで要素を追加する
-			itemArr << Item{ itemDropChance % 10,it->getCenter() };
-		}
-	*/
-
-
-	
 	//E弾処理
 
 	//e弾hit
@@ -239,13 +229,13 @@ void Game::update()
 	for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
 	{
 		bool exist = false;
-		for (auto i : step(townArr.size()))
+		for (auto i : step(townArray.size()))
 		{
-			if (it->collider.intersects(townArr[i].getCollider()))
+			if (it->collider.intersects(townArray[i].getCollider()))
 			{
 				if (!getData().testMode)
 				{
-					townArr[i].damage(it->damage);
+					townArray[i].damage(it->damage);
 				}
 				it = enemyBulletArray.erase(it);
 				exist = true;
@@ -268,7 +258,7 @@ void Game::update()
 
 		else
 		{
-			if (it->collider.intersects(earth))
+			if (it->collider.intersects(stage))
 			{
 				it = enemyBulletArray.erase(it);
 			}
@@ -280,18 +270,18 @@ void Game::update()
 	}
 	
 	//town更新
-	for (size_t i = 0; i < townArr.size(); ++i)
+	for (size_t i = 0; i < townArray.size(); ++i)
 	{
-		townArr.at(i).update(deltaTime);
-		townArr[i].shot(pBulletArr);
+		townArray.at(i).update(deltaTime);
+		townArray[i].shot(playerBulletArray);
 	}
 
 	//Town処理
-	for (auto& town : townArr)
+	for (auto& town : townArray)
 	{
 		if (town.getHP() <= 0)
 		{
-			gameState = gameOver;
+			gameState = GameState::gameOver;
 		}
 	}
 
@@ -302,9 +292,9 @@ void Game::update()
 	camera.setTargetCenter(Circular{player.getR() + cameraOffsetY,0});
 	if (cameraMode)
 	{
-		if (player.getR()< StageInfo::earthR)
+		if (player.getR()< StageInfo::stageRadius)
 		{
-			camera.setTargetScale(cameraScale * (1 - 0.65 * ((StageInfo::earthR - player.getR()) / StageInfo::earthR)));
+			camera.setTargetScale(cameraScale * (1 - 0.65 * ((StageInfo::stageRadius - player.getR()) / StageInfo::stageRadius)));
 		}
 		else
 		{
@@ -328,21 +318,21 @@ void Game::draw() const
 
 		TextureAsset(U"gameBackGround").scaled(1.0).drawAt(0, 0);
 		//ステージ
-		earth.draw(Palette::Saddlebrown);
+		stage.draw(Palette::Saddlebrown);
 		for (int i = 0; i < 100; i++)
 		{
 			double tileDeg = Math::Pi * 2 / 100 * i;
-			TextureAsset(U"ground").scaled(0.07).rotated(tileDeg).drawAt(OffsetCircular({ 0,0 }, StageInfo::earthR, tileDeg));
+			TextureAsset(U"ground").scaled(0.07).rotated(tileDeg).drawAt(OffsetCircular({ 0,0 }, StageInfo::stageRadius, tileDeg));
 		}
 
 		//街
-		for (int32 i:step(townArr.size()))
+		for (int32 i:step(townArray.size()))
 		{
-			double townRotate = Math::ToRadians(i * (360/townArr.size()));
-			switch (townArr[i].getTownType())
+			double townRotate = Math::ToRadians(i * (360/townArray.size()));
+			switch (townArray[i].getTownType())
 			{
 			case TownType::Nomal:
-				TextureAsset(U"town").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::earthR + townPosOffset.r, townRotate + townPosOffset.theta));
+				TextureAsset(U"town").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
 				break;
 			case TownType::Attack:
 				break;
@@ -359,7 +349,7 @@ void Game::draw() const
 		player.draw();
 
 		//p弾
-		for (auto& bullet : pBulletArr)
+		for (auto& bullet : playerBulletArray)
 		{
 			switch (bullet.type)
 			{
@@ -382,26 +372,8 @@ void Game::draw() const
 		//敵弾
 		m_enemyManager.enemyBulletDraw();
 		//アイテム
-		/*for (auto& item : itemArr)
-		{
-
-			String itemType;
-			switch (item.itemType)
-			{
-			case 0:
-				itemType = U"AttackUpgrade";
-				break;
-			case 1:
-				itemType = U"shieldUpgrade";
-				break;
-			case 2:
-				itemType = U"specialUpgrade";
-				break;
-			default:
-				break;
-			}
-			TextureAsset(itemType).scaled(0.04).rotated(item.pos.theta).drawAt(OffsetCircular({ 0,0 }, item.pos));
-		}*/
+		m_itemManager.draw();
+		
 	}
 
 	//-------UI------------
@@ -417,17 +389,17 @@ void Game::draw() const
 	//街のHP
 	double interval = 180;
 	Array<String> townNameArr = { U"普通の街 HP",U"攻撃の街 HP" ,U"防御の街 HP" ,U"特殊の街 HP" };
-	for (int i = 0; i < townArr.size(); i++)
+	for (int i = 0; i < townArray.size(); i++)
 	{
 		RoundRect{ i*interval + 600,1020,180,60,10 }.draw(Palette::Gray);
 		FontAsset(U"townHPFont")(townNameArr.at(i)).drawAt(i * interval + 690, 1030);
 	}
-	for (size_t i = 0; i < townArr.size(); i++)
+	for (size_t i = 0; i < townArray.size(); i++)
 	{
 		const double x = interval * i;
 		const double y = 0;
 		const RectF rect = RectF{ x, y, 150, 16 }.movedBy(615, 1050);
-		townArr.at(i).drawHPBar(rect);
+		townArray.at(i).drawHPBar(rect);
 	}
 
 	//プレイヤー強化
@@ -438,13 +410,13 @@ void Game::draw() const
 		switch (i)
 		{
 		case 0:
-			FontAsset(U"townHPFont")(player.getUpgradeCnt().Attack).drawAt(860 + 100 * i, 980, Palette::Blue);
+			FontAsset(U"townHPFont")(player.getUpgradeCnt()[ItemType::AttackUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
 			break;
 		case 1:
-			FontAsset(U"townHPFont")(player.getUpgradeCnt().Defense).drawAt(860 + 100 * i, 980, Palette::Blue);
+			FontAsset(U"townHPFont")(player.getUpgradeCnt()[ItemType::ShieldUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
 			break;
 		case 2:
-			FontAsset(U"townHPFont")(player.getUpgradeCnt().Special).drawAt(860 + 100 * i, 980, Palette::Blue);
+			FontAsset(U"townHPFont")(player.getUpgradeCnt()[ItemType::SpecialUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
 			break;
 		default:
 			break;
@@ -457,13 +429,13 @@ void Game::draw() const
 	//GameOver
 	switch (gameState)
 	{
-	case Game::play:
+	case GameState::play:
 		break;
-	case Game::gameOver:
+	case GameState::gameOver:
 		font(U"GMAE OVER").drawAt(Scene::Center(), Palette::Gray);
 		font(U"Press J Key").drawAt(40, { Scene::Center().x,Scene::Center().y + 100 }, Palette::Gray);
 		break;
-	case Game::clear:
+	case GameState::clear:
 		font(U"CLEAR!").drawAt(Scene::Center(), Palette::Gray);
 		font(U"Press J Key").drawAt(40, { Scene::Center().x,Scene::Center().y + 100 }, Palette::Gray);
 		break;

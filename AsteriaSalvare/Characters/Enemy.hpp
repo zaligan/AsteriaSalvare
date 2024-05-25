@@ -39,10 +39,10 @@ public:
 	double getHP() const;
 
 	/// @brief 弾を発射します
-	/// @param eBulletArr 敵のBulletを管理する配列です
-	/// @param pJetPos プレイヤーの座標です
+	/// @param enemyBulletArray 敵のBulletを管理する配列です
+	/// @param playerPosition プレイヤーの座標です
 	/// @return 弾を発射したら,trueを返します
-	bool shot(Array<Bullet>& enemyBulletArray, const Vec2& pJetPos);
+	bool shot(Array<Bullet>& enemyBulletArray, const Vec2& playerPosition);
 
 	/// @brief 敵の生死を返します
 	/// @return 敵が死んでいる時,true
@@ -70,7 +70,7 @@ private:
 	double m_currentHP = m_maxHP;
 
 	/// @brief 自身の中心の座標です
-	Circular m_pos{ 100,0 };
+	Circular m_position{ 100,0 };
 
 	/// @brief 衝突範囲です
 	Circle m_collider{ {0,0},10 };

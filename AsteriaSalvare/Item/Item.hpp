@@ -1,10 +1,15 @@
 ﻿# pragma once
 # include <Siv3D.hpp>
 
-/// @brief アイテムの種類と数を管理します
-struct Item
+enum class ItemType
 {
-	int32 AttackUpgrade = 0;
-	int32 ShieldUpgrade = 0;
-	int32 SpecialUpgrade = 0;
+	AttackUpgrade,
+	ShieldUpgrade,
+	SpecialUpgrade
+};
+
+struct StageItem
+{
+	Circular position;
+	ItemType itemType;
 };

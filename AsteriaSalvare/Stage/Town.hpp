@@ -3,6 +3,7 @@
 #include"StageInfo.hpp"
 #include"HPBar.h"
 #include"Upgrade.hpp"
+#include"Item.hpp"
 
 namespace TownType
 {
@@ -31,7 +32,7 @@ public:
 	{
 		m_attackTimer += deltaTime;
 		m_hPBar.update();
-		m_attackLevel = Min(5, m_upgrade.Attack / 5);
+		m_attackLevel = Min(5, m_upgradeItem[ItemType::AttackUpgrade] / 5);
 	}
 
 	void shot(Array<Bullet>& bulletArr)
@@ -94,9 +95,11 @@ public:
 		return m_attackValue;
 	}
 
-	void addUpgrade(Upgrade upg)
+	void addUpgrade(HashTable<ItemType, int32> upgradeItem)
 	{
-		m_upgrade += upg;
+		m_upgradeItem[ItemType::AttackUpgrade] += upgradeItem[ItemType::AttackUpgrade];
+		m_upgradeItem[ItemType::ShieldUpgrade] += upgradeItem[ItemType::ShieldUpgrade];
+		m_upgradeItem[ItemType::SpecialUpgrade] += upgradeItem[ItemType::SpecialUpgrade];
 	}
 
 	/// @brief 衝突範囲を返します
@@ -123,8 +126,12 @@ private:
 	HPBar m_hPBar{ m_maxTownHP };
 
 	/// @brief 街の強化状態
-	Upgrade m_upgrade = {0,0,0};
-
+	HashTable<ItemType, int32> m_upgradeItem =
+	{
+		{ItemType::AttackUpgrade,0},
+		{ItemType::ShieldUpgrade,0},
+		{ItemType::SpecialUpgrade,0},
+	};
 	//街が１度に発射する弾数(0以上5以下)
 	int32 m_attackLevel = 0;
 

@@ -12,11 +12,15 @@ void EnemyManger::update(double deltaTime)
 	//敵の生成
 	spawnEnemy();
 
-	//敵の更新
+	//1体ずつ更新
 	for (auto& enemy : m_enemyArray)
 	{
 		enemy.update();
+		enemy.shot(m_enemyBulletArray, m_player.getCenter());
 	}
+
+	//死亡している敵を削除
+	removeDeadEnemies();
 
 	//敵の弾の更新
 	bulletUpdate();
@@ -38,9 +42,9 @@ void EnemyManger::enemyBulletDraw() const
 	}
 }
 
-Array<Vec2> EnemyManger::removeDeadEnemies()
+Array<Vec2> EnemyManger::getDeadEnemyPosition()
 {
-	return Array<Vec2>();
+	return m_deadEnemyPosition;
 }
 
 void EnemyManger::spawnEnemy()
@@ -61,14 +65,31 @@ void EnemyManger::spawnEnemy()
 
 void EnemyManger::bulletUpdate()
 {
-	//移動処理
+	//移動
 	for (auto& bullet : m_enemyBulletArray)
 	{
-		//TODO:updateという名前を分かりやすいものに変更する
-		Vec2 update(bullet.direction * EnemyBullet::speed * m_deltaTime);
-		bullet.collider.setCenter(bullet.collider.center + update);
+		Vec2 move(bullet.direction * EnemyBullet::speed * m_deltaTime);
+		bullet.collider.setCenter(bullet.collider.center + move);
 	}
 
 	//範囲外の弾は削除
 	m_enemyBulletArray.remove_if([](const Bullet& b) {return (b.collider.center.x < -StageInfo::bulletDeleteRange) || (b.collider.center.x > StageInfo::bulletDeleteRange) || (b.collider.center.y < -StageInfo::bulletDeleteRange) || (b.collider.center.y > StageInfo::bulletDeleteRange); });
+}
+
+void EnemyManger::removeDeadEnemies()
+{
+	m_deadEnemyPosition.clear();
+
+	for (auto it = m_enemyArray.begin(); it != m_enemyArray.end();)
+	{
+		if (it->isDead())
+		{
+			m_deadEnemyPosition << it->getCenter();
+			it = m_enemyArray.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }

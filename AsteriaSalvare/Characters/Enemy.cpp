@@ -2,33 +2,34 @@
 
 Enemy::Enemy(double r, double theta)
 {
-	double spawn_r = StageInfo::earthR + r;
-	m_pos = Circular{ spawn_r, theta };
-	m_from = m_pos;
+	double spawn_r = StageInfo::stageRadius + r;
+	m_position = Circular{ spawn_r, theta };
+	m_from = m_position;
 	//一番近い家のラジアン 0, π/2, π, 3π/2
-	double houseDeg = (static_cast<int>((m_pos.theta + (Math::HalfPi / 2)) / Math::HalfPi) % 4) * Math::HalfPi;
+	double houseDeg = (static_cast<int>((m_position.theta + (Math::HalfPi / 2)) / Math::HalfPi) % 4) * Math::HalfPi;
 	double enemyRandomTheta = Math::ToRadians(Random(-60, 60)) + houseDeg;
 	double enemyRandomR = m_enemyHouseRange + Random(0, 120);
 
 	//OffsetCircularからCircularに変換するためVec2を経由
-	m_to = Vec2(OffsetCircular({ Circular(StageInfo::earthR,houseDeg) }, enemyRandomR, enemyRandomTheta));
+	m_to = Vec2(OffsetCircular({ Circular(StageInfo::stageRadius,houseDeg) }, enemyRandomR, enemyRandomTheta));
 }
 
 void Enemy::draw() const
 {
 	if (m_currentHP <= 0)
 	{
-		m_explosionAnime.drawAt(OffsetCircular({ 0,0 }, m_pos.r, m_pos.theta));
+		const ScopedRenderStates2D blend{ BlendState::Additive };
+		m_explosionAnime.drawAt(OffsetCircular({ 0,0 }, m_position.r, m_position.theta));
 	}
 	else
 	{
-		TextureAsset(U"enemy").rotated(m_pos.theta).drawAt(m_collider.center);
+		TextureAsset(U"enemy").rotated(m_position.theta).drawAt(m_collider.center);
 	}
 }
 
 void Enemy::update()
 {
-	//死亡時のアニメーションが死亡フラグをたてる
+	//死亡アニメーションが終了したら死亡フラグをたてる
 	if (m_currentHP <= 0)
 	{
 		m_deadFlag = m_explosionAnime.update();
@@ -36,11 +37,9 @@ void Enemy::update()
 	
 	//移動
 	const double t = Min(stopwatch.sF() / 10, 1.0);
-	m_pos.r = Math::Lerp(m_from.r, m_to.r, t);
-	m_pos.theta = Math::LerpAngle(m_from.theta, m_to.theta, t);
-	m_collider.setPos(m_pos);
-
-
+	m_position.r = Math::Lerp(m_from.r, m_to.r, t);
+	m_position.theta = Math::LerpAngle(m_from.theta, m_to.theta, t);
+	m_collider.setPos(m_position);
 }
 
 bool Enemy::damage(double damage)
@@ -64,7 +63,7 @@ bool Enemy::shot(Array<Bullet>& enemyBulletArray, const Vec2& playerPosition)
 		//プレイヤーまでのベクトル
 		const Vec2 toPlayer = playerPosition - getCenter();
 		//街までのベクトル
-		const Vec2 toTown = OffsetCircular({ 0,0 }, StageInfo::earthR, ((static_cast<int>((m_pos.theta + (Math::HalfPi / 2)) / Math::HalfPi) % 4) * Math::HalfPi)) - getCollider().center;
+		const Vec2 toTown = OffsetCircular({ 0,0 }, StageInfo::stageRadius, ((static_cast<int>((m_position.theta + (Math::HalfPi / 2)) / Math::HalfPi) % 4) * Math::HalfPi)) - getCollider().center;
 		//弾が発射される方向
 		Vec2 direction = {0,0};
 
@@ -101,7 +100,7 @@ bool Enemy::isDead() const
 
 Circular Enemy::getCenter() const
 {
-	return m_pos;
+	return m_position;
 }
 
 bool Enemy::isHitThisBullet(int32 bulletID)
