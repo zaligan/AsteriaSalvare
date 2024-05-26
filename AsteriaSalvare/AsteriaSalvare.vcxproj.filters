@@ -162,9 +162,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\AssetReader\AssetReader.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\Game.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
@@ -175,6 +172,12 @@
       <Filter>Source Files\Charactors</Filter>
     </ClCompile>
     <ClCompile Include="Characters\EnemyManager.cpp">
+      <Filter>Source Files\Charactors</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\AssetReader.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters\Shileld.cpp">
       <Filter>Source Files\Charactors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -848,9 +851,6 @@
     <ClInclude Include="Figure.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\AssetReader\AssetReader.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Game.hpp">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
@@ -892,6 +892,12 @@
     </ClInclude>
     <ClInclude Include="Volume.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\AssetReader.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\Shileld.hpp">
+      <Filter>Source Files\Charactors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

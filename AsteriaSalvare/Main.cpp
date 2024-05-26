@@ -2,7 +2,7 @@
 # include "Common.hpp" // シーン間で共有するデータ
 # include "Title.hpp" // タイトルシーン
 # include "Game.hpp" // ゲームシーン
-# include "AssetReader/AssetReader.hpp"	//アセットを読み込むクラス
+# include "AssetReader.hpp"	//アセットを読み込むクラス
 
 void Main()
 {

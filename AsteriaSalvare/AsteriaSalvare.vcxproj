@@ -119,6 +119,7 @@
   <ItemGroup>
     <ClCompile Include="Characters\Enemy.cpp" />
     <ClCompile Include="Characters\EnemyManager.cpp" />
+    <ClCompile Include="Characters\Shileld.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\Game.cpp" />
     <ClCompile Include="Scenes\Title.cpp" />
@@ -126,7 +127,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Utils\AssetReader\AssetReader.cpp" />
+    <ClCompile Include="Utils\AssetReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -337,6 +338,7 @@
     <ClInclude Include="Characters\Enemy.hpp" />
     <ClInclude Include="Characters\EnemyManager.hpp" />
     <ClInclude Include="Characters\Player.hpp" />
+    <ClInclude Include="Characters\Shileld.hpp" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Item\Item.hpp" />
     <ClInclude Include="Item\ItemManager.hpp" />
@@ -347,7 +349,7 @@
     <ClInclude Include="Stage\Town.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils\Anime.hpp" />
-    <ClInclude Include="Utils\AssetReader\AssetReader.hpp" />
+    <ClInclude Include="Utils\AssetReader.hpp" />
     <ClInclude Include="Utils\HPBar.h" />
     <ClInclude Include="Volume.hpp" />
   </ItemGroup>

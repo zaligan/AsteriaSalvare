@@ -101,7 +101,7 @@ void Game::update()
 	player.update(deltaTime);
 
 	//攻撃orシールド展開
-	player.useShield(shieldInput.pressed());
+	//player.useShield(shieldInput.pressed());
 
 	if (shotInput.pressed() && !shieldInput.pressed())
 	{
@@ -180,7 +180,7 @@ void Game::update()
 	//-------------シールド処理------------------
 	
 	//e弾VS Shield
-	if (player.isShieldAvailable())
+	/*if (player.isShieldAvailable())
 	{
 		auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
 		for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
@@ -195,7 +195,7 @@ void Game::update()
 			}
 			it++;
 		}
-	}
+	}*/
 
 
 	//--------------アップグレードアイテム-------------------
