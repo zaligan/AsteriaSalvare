@@ -11,223 +11,106 @@ class Player
 {
 public:
 	/// @brief プレイヤーを作成します
-	Player() {};
+	Player();
 
 	/// @brief フレーム時間に合わせて更新します
 	/// @param deltaTime フレーム時間を渡します
-	void update(double deltaTime)
-	{
-		m_deltaTime = deltaTime;
-		m_shotTimer += m_deltaTime;
-		//shieldUpdate();
-		//m_collider.setCenter(m_pos);
-		////自然回復
-		//if (!m_shieldFlag)
-		//{
-		//	m_shieldCurrentHP = std::min(m_maxShieldHP, m_shieldCurrentHP + m_shieldRegenerationRate * deltaTime);
-		//}
+	void update(double deltaTime);
 
-		//強化値が一定を超えたら強化モード
-		if (m_enhancePoint > m_enhanceThreshold)
-		{
-			//強化時１度だけ鳴らす
-			if (!m_isEnhanced)
-			{
-				AudioAsset(U"playerEnhanced").playOneShot();
-			}
-			m_isEnhanced = true;
-		}
-
-		//強化値が一定を超えたらシールド全回復
-		if (m_enhancePoint > m_shieldRestoreThreshold * (m_shieldRestoreCnt + 1))
-		{
-			m_shieldRestoreCnt++;
-			//shieldRestoreHP(m_maxShieldHP - m_shieldCurrentHP);
-		}
-
-		//強化値が0以下の時強化モード解除
-		if (m_enhancePoint <= 0)
-		{
-			m_isEnhanced = false;
-			m_shieldRestoreCnt = 0;
-			m_enhanceEffectAnime.reset();
-		}
-
-		m_enhanceEffectAnime.update();
-		
-	}
+	/// @brief プレイヤーを描画します
+	void draw() const;
 
 	/// @brief 入力に応じてプレイヤーを移動します
 	/// @param directions 入力されている方向を表すパラメータです
-	void move( double moveInput_X,double moveInput_Y)
-	{
-		m_pos.r += m_vertSpeed * m_deltaTime * moveInput_Y;
-		m_pos.theta += 2 * Math::Pi * m_deltaTime / (m_maxRotateSpeed + ((m_minRotateSpeed - m_maxRotateSpeed) * ((getR() - m_moveRange.minRadius) / (m_moveRange.maxRadius - m_moveRange.minRadius)))) * moveInput_X;
-		m_pos.r = Clamp(m_pos.r, m_moveRange.minRadius, m_moveRange.maxRadius);
-	}
-
-	void move(Vec2 moveInput)
-	{
-		move(moveInput.x, moveInput.y);
-	}
-
-	/// @brief プレイヤーを描画します
-	void draw() const
-	{
-	/*	TextureAsset(U"player").scaled(m_playerSize).rotated(m_pos.theta).drawAt(m_pos);
-		if (m_shieldFlag)
-		{
-			shieldDraw(m_pos);
-		}
-		if (m_isEnhanced)
-		{
-			m_enhanceEffectAnime.drawAt(m_pos, m_pos.theta);
-		}*/
-	}
+	void move(Vec2 moveInput);
 
 	/// @brief 弾を発射します
 	/// @param bulletArr プレイヤーの弾を管理する配列です
-	void shot(Array< Bullet >& bulletArr)
-	{
-		if(m_isEnhanced)
-		{
-			//強化時の射撃
-			if (m_shotTimer > m_enhancedShotCoolTime)
-			{
-				m_shotTimer = 0;
-
-				Vec2 direction = Vec2(Circular{ 1,getTheta() }).normalized();
-
-				bulletArr << Bullet{ BulletType::Enhanced,m_enhancedBulletID,Circle{getCenter(),PlayerBullet::enhancedBulletSize}, direction ,m_enhancedBulletDamage };
-
-				m_enhancedBulletID++;
-
-				m_enhancePoint = Max(m_enhancePoint- m_shotLostEnhancePoint,0.0);
-				
-				AudioAsset(U"playerShoot").playOneShot(Volume::playerShot, 0, 1.0);
-			}
-		}
-		else
-		{
-			//通常時の射撃
-			if (m_shotTimer > m_shotCoolTime)
-			{
-				m_shotTimer = 0;
-
-				Vec2 direction = Vec2(Circular{ 1,getTheta() }).normalized();
-
-				bulletArr << Bullet{ BulletType::Normal,0,Circle{getCenter(),PlayerBullet::size}, direction ,m_bulletDamage };
-
-				AudioAsset(U"playerShoot").playOneShot(Volume::playerShot,0,1.0);
-			}
-		}
-	}
-
+	void shot(Array< Bullet >& bulletArr);
+	
 	/// @brief 現在のHPを返します
 	/// @return 現在のHPです
-	double getHP() const
-	{
-		return m_currentHP;
-	}
+	double getHP() const;
 
 	/// @brief プレイヤーにダメージを与えます
 	/// @param damege 受けるダメージ量です
-	void damage(double damege)
-	{
-		m_currentHP -= damege;
-	}
+	void damage(double damege);
 
 	/// @brief プレイヤーの中心座標をVec2で返します
 	/// @return Vec2型のプレイヤー中心座標
-	Vec2 getCenter() const
-	{
-		return Vec2( m_pos );
-	}
+	Vec2 getCenter() const;
+
 
 	/// @brief プレイヤーの中心座標をCircularで返します
 	/// @return Circular型のプレイヤー中心座標
-	Circular getCircular() const
-	{
-		return m_pos;
-	}
+	Circular getCircular() const;
+
 
 	/// @brief マップ中央からプレイヤーの距離を返します
 	/// @return マップ中央からプレイヤーの距離
-	double getR() const
-	{
-		return m_pos.r;
-	}
+	double getR() const;
 
 	/// @brief プレイヤーの回転角度を返します
 	/// @return プレイヤーの回転角度
-	double getTheta() const
-	{
-		return m_pos.theta;
-	}
+	double getTheta() const;
 
 	/// @brief プレイヤーの衝突範囲を返します
 	/// @return プレイヤーの衝突範囲
-	Circle getCollider() const
-	{
-		return m_collider;
-	}
+	Circle getCollider() const;
 
+	Circle getShieldCollider();
 
-	void addEnhancePoint(double addPoint)
-	{
-		m_enhancePoint += addPoint;
-	}
+	/// @brief シールドが使用中か返します
+	/// @return シールドを使っていたら true
+	bool isShieldActive() const;
+
+	/// @brief シールドの展開、収納を行います
+	/// @param isActive true の時シールドを展開、false の時シールドを収納します
+	void setShieldActive(bool isActive);
+
+	void shieldDamage(double damage);
+
+	void addEnhancePoint(double addPoint);
+
+	/// @brief 所持アイテム数を返します
+	/// @return 所持しているアイテム数
+	HashTable<ItemType, int32> getItemCollection() const;
 
 	/// @brief アップグレードアイテムの所持数を加算
 	/// @param itemType アップグレードの種類
-	void addOnePointUpgrade(ItemType itemType)
-	{
-		m_itemCollection[itemType]++;
-	}
+	void addOnePointUpgrade(ItemType itemType);
+
+	/// @brief 指定したアイテムを減らします
+	/// @param itemType 減らすアイテムの種類
+	/// @param value 減らす数
+	void removeItem(ItemType itemType,int32 value);
 
 	/// @brief 所持アップグレード数をすべて0にする
-	void resetUpgrade()
-	{
-		m_itemCollection =
-		{
-			{ItemType::AttackUpgrade,0},
-			{ItemType::ShieldUpgrade,0},
-			{ItemType::SpecialUpgrade,0}
-		};
-	}
+	void resetUpgrade();
+
 
 	/// @brief 所持アップグレード数を返します
 	/// @return 所持アップグレード数
-	HashTable<ItemType, int32> getUpgradeCnt() const
-	{
-		return m_itemCollection;
-	}
+	HashTable<ItemType, int32> getUpgradeCnt() const;
 
-	bool isEnhanced()
-	{
-		return m_isEnhanced;
-	}
+	bool isEnhanced();
+
 
 	//TODO:関数名と引数名が適切か確認
-	void setEnhancePoint(int32 point)
-	{
-		m_enhancePoint += point;
-	}
+	void setEnhancePoint(int32 point);
 
 	//TODO:関数名と引数名が適切か確認
-	void resetEnhancePoint()
-	{
-		m_enhancePoint = 0;
-	}
-
+	void resetEnhancePoint();
 
 private:
-	
+
+	Shield m_shield;
+
 	//１フレームの時間です
 	double m_deltaTime = 0;
 
 	//プレイヤーの中心座標(半径、回転角)です
-	Circular m_pos{ StageInfo::stageRadius,0 };
+	Circular m_position{ StageInfo::stageRadius,0 };
 
 	//プレイヤーの衝突範囲です
 	Circle m_collider{ 0,0,m_playerSize * 10 };

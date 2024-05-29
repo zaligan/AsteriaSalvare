@@ -101,7 +101,7 @@ void Game::update()
 	player.update(deltaTime);
 
 	//攻撃orシールド展開
-	//player.useShield(shieldInput.pressed());
+	player.setShieldActive(shieldInput.pressed());
 
 	if (shotInput.pressed() && !shieldInput.pressed())
 	{
@@ -179,23 +179,20 @@ void Game::update()
 
 	//-------------シールド処理------------------
 	
-	//e弾VS Shield
-	/*if (player.isShieldAvailable())
+	//シールドと敵の弾の衝突処理
+	if (player.isShieldActive())
 	{
-		auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
-		for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
-		{
-			if (it->type == BulletType::Enemy && it->collider.intersects(player.getShieldCollider()))
+		m_enemyManager.processBulletCollisions([this](Bullet& bullet) -> bool
 			{
-				player.shieldDamage(it->damage);
-				player.addEnhancePoint(it->damage / 10);
-				it = enemyBulletArray.erase(it);
-
-				continue;
-			}
-			it++;
-		}
-	}*/
+				if (bullet.collider.intersects(player.getShieldCollider()))
+				{
+					player.shieldDamage(bullet.damage);
+					player.addEnhancePoint(bullet.damage / 10);
+					return true;
+				}
+				return false;
+			});
+	}
 
 
 	//--------------アップグレードアイテム-------------------
@@ -225,7 +222,7 @@ void Game::update()
 	//E弾処理
 
 	//e弾hit
-	auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
+	/*auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
 	for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
 	{
 		bool exist = false;
@@ -267,7 +264,7 @@ void Game::update()
 				++it;
 			}
 		}
-	}
+	}*/
 	
 	//town更新
 	for (size_t i = 0; i < townArray.size(); ++i)

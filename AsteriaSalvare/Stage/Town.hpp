@@ -23,7 +23,7 @@ public:
 
 	Town(TownType::Type tType,Circular pos):
 		m_townType(tType),
-		m_pos(pos)
+		m_position(pos)
 	{
 		m_collider.setCenter(pos);
 	}
@@ -51,12 +51,12 @@ public:
 		}
 
 		//弾の衝突範囲
-		Circle bulletCollider{ m_pos,m_bulletR };
+		Circle bulletCollider{ m_position,m_bulletR };
 
 		//発射弾数が1の時
 		if (m_attackLevel == 1)
 		{
-			Vec2 direction = Vec2(Circular{ 1,m_pos.theta }).normalized();
+			Vec2 direction = Vec2(Circular{ 1,m_position.theta }).normalized();
 			bulletArr << Bullet{ BulletType::Town,0,bulletCollider,direction,m_attackValue };
 			return;
 		}
@@ -65,7 +65,7 @@ public:
 		for (int32 i : step(m_attackLevel))
 		{
 			double degrees = -15.0 * m_attackLevel + i * 30.0 * m_attackLevel / (m_attackLevel - 1.0);
-			Vec2 direction = Vec2(Circular{ 1,ToRadians(degrees) + m_pos.theta }).normalized();
+			Vec2 direction = Vec2(Circular{ 1,ToRadians(degrees) + m_position.theta }).normalized();
 			bulletArr << Bullet{ BulletType::Town,0,bulletCollider,Vec2{direction}.normalized(),m_attackValue};
 		}
 	}
@@ -111,7 +111,7 @@ public:
 
 private:
 	/// @brief 街のCircular座標
-	Circular m_pos = { 0,0 };
+	Circular m_position = { 0,0 };
 
 	/// @brief 衝突判定
 	Circle m_collider{ 0,0,StageInfo::townSize};

@@ -20,10 +20,9 @@ public:
 		return m_enemyArray;
 	}
 
-	Array<Bullet>& getEnemyBulletArray()
-	{
-		return m_enemyBulletArray;
-	}
+	/// @brief 弾が他オブジェクトと衝突した時の処理を行います
+	/// @param func 衝突時に他オブジェクト側で行う処理をラムダ式で渡します,戻り値がtrueなら弾を削除します
+	void processBulletCollisions(std::function<bool(Bullet&)> func);
 
 	Array<Vec2> getDeadEnemyPosition();
 

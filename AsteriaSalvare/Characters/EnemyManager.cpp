@@ -36,9 +36,25 @@ void EnemyManger::enemyDraw() const
 
 void EnemyManger::enemyBulletDraw() const
 {
-	for (auto& eBullet : m_enemyBulletArray)
+	for (auto& bullet : m_enemyBulletArray)
 	{
-		TextureAsset(U"enemyBullet").drawAt(eBullet.collider.center);
+		TextureAsset(U"enemyBullet").drawAt(bullet.collider.center);
+	}
+}
+
+void EnemyManger::processBulletCollisions(std::function<bool(Bullet&)> func)
+{
+	for (auto it = m_enemyBulletArray.begin(); it != m_enemyBulletArray.end();)
+	{
+		//弾が他オブジェクトと衝突した時の処理
+		if (func(*it))
+		{
+			it = m_enemyBulletArray.erase(it);
+		}
+		else
+		{
+			it++;
+		}
 	}
 }
 
