@@ -176,23 +176,33 @@ void Game::update()
 
 	//ステージ上のアイテムを更新
 	m_itemManager.update(deltaTime);
-
-	//-------------シールド処理------------------
-	
-	//シールドと敵の弾の衝突処理
-	if (player.isShieldActive())
-	{
-		m_enemyManager.processBulletCollisions([this](Bullet& bullet) -> bool
+		
+	//敵の弾と他オブジェクトの衝突処理
+	m_enemyManager.processBulletCollisions([this](Bullet& bullet) -> bool
+		{
+			//シールドと敵の弾の衝突処理
+			if (player.isShieldActive() && bullet.collider.intersects(player.getShieldCollider()))
 			{
-				if (bullet.collider.intersects(player.getShieldCollider()))
+				player.shieldDamage(bullet.damage);
+				player.addEnhancePoint(bullet.damage / 10);
+				return true;
+			}
+
+			//プレイヤーと敵の弾の衝突処理
+			if (bullet.collider.intersects(player.getCollider()))
+			{
+				if (!getData().testMode)
 				{
-					player.shieldDamage(bullet.damage);
-					player.addEnhancePoint(bullet.damage / 10);
-					return true;
+					player.damage(bullet.damage);
 				}
-				return false;
-			});
-	}
+				return true;
+			}
+
+			//ステージと敵の弾の衝突処理
+			return bullet.collider.intersects(m_stage);
+
+			return false;
+		});
 
 
 	//--------------アップグレードアイテム-------------------
@@ -219,7 +229,7 @@ void Game::update()
 		}
 	}
 
-	//E弾処理
+	
 
 	//e弾hit
 	/*auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
@@ -244,14 +254,7 @@ void Game::update()
 			continue;
 		}
 
-		if (it->collider.intersects(player.getCollider()))
-		{
-			if (!getData().testMode)
-			{
-				player.damage(it->damage);
-			}
-			it = enemyBulletArray.erase(it);
-		}
+		
 
 		else
 		{
@@ -315,7 +318,7 @@ void Game::draw() const
 
 		TextureAsset(U"gameBackGround").scaled(1.0).drawAt(0, 0);
 		//ステージ
-		stage.draw(Palette::Saddlebrown);
+		m_stage.draw(Palette::Saddlebrown);
 		for (int i = 0; i < 100; i++)
 		{
 			double tileDeg = Math::Pi * 2 / 100 * i;

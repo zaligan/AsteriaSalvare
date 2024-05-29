@@ -48,7 +48,7 @@ private:
 	Vec2 moveInput = { 0,0 };
 
 	/// @brief 円形ステージです
-	static constexpr Circle stage{ 0, 0, StageInfo::stageRadius };
+	static constexpr Circle m_stage{ 0, 0, StageInfo::stageRadius };
 
 
 	const Font font{ FontMethod::SDF,52,Typeface::Bold };

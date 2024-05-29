@@ -5,11 +5,17 @@ Shield::Shield(Player& player) : m_player(player) {}
 
 void Shield::update()
 {
-	//耐久値が0以下になったらアイテムを消費して回復
-	if (m_currentHP <= 0 && 1 <= m_player.getItemCollection()[ItemType::ShieldUpgrade])
+	if (m_currentHP <= 0)
 	{
-		m_player.removeItem(ItemType::ShieldUpgrade, 1);
-		m_currentHP = m_durabilityPerItem;
+		if (m_player.getItemCollection()[ItemType::ShieldUpgrade] > 0)
+		{
+			m_player.removeItem(ItemType::ShieldUpgrade, 1);
+			m_currentHP += m_durabilityPerItem;
+		}
+		else
+		{
+			m_currentHP = 0;
+		}
 	}
 
 	//シールドを解除したフレームならアニメーションをリセット
@@ -35,7 +41,7 @@ void Shield::draw()	const
 {
 	if(not m_isActive) return;
 
-	double colorH = 110;
+	double colorH = (m_currentHP / 10) + 110;
 	m_collider.draw(ColorF(HSV{ 250 + colorH,0.9,1 }, 0.7));
 	m_shieldUseAnimation.drawAt(Circular(m_player.getCircular().r + m_animePositionOffset.r, m_player.getCircular().theta + m_animePositionOffset.theta), m_player.getCircular().theta);
 }
@@ -68,22 +74,7 @@ Circle Shield::getCollider()
 
 void Shield::damage(double damage)
 {
-	m_currentHP += damage;
-
-	//総ダメージ量がアイテム一つ分超えたらアイテムを消費
-	if(m_currentHP >= m_durabilityPerItem)
-	{
-		m_currentHP -= m_durabilityPerItem;
-
-		if(m_player.getItemCollection()[ItemType::ShieldUpgrade] > 0)
-		{
-			m_player.removeItem(ItemType::ShieldUpgrade,1);
-		}
-		else
-		{
-			m_currentHP = 0;
-		}
-	}
+	m_currentHP -= damage;
 }
 
 void Shield::shieldRestoreHP(double heal)

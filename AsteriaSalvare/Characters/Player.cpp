@@ -9,39 +9,28 @@ void Player::update(double deltaTime)
 	m_shotTimer += m_deltaTime;
 	m_shield.update();
 	m_collider.setCenter(m_position);
-	////自然回復
-	//if (!m_shieldFlag)
-	//{
-	//	m_shieldCurrentHP = std::min(m_maxShieldHP, m_shieldCurrentHP + m_shieldRegenerationRate * deltaTime);
-	//}
 
-	////強化値が一定を超えたら強化モード
-	//if (m_enhancePoint > m_enhanceThreshold)
-	//{
-	//	//強化時１度だけ鳴らす
-	//	if (!m_isEnhanced)
-	//	{
-	//		AudioAsset(U"playerEnhanced").playOneShot();
-	//	}
-	//	m_isEnhanced = true;
-	//}
+	//以下エンハンス関連
+	//強化値が一定を超えたら強化モード
+	if (m_enhancePoint > m_enhanceThreshold)
+	{
+		//強化時１度だけ鳴らす
+		if (!m_isEnhanced)
+		{
+			AudioAsset(U"playerEnhanced").playOneShot();
+		}
+		m_isEnhanced = true;
+	}
 
-	////強化値が一定を超えたらシールド全回復
-	//if (m_enhancePoint > m_shieldRestoreThreshold * (m_shieldRestoreCnt + 1))
-	//{
-	//	m_shieldRestoreCnt++;
-	//	//shieldRestoreHP(m_maxShieldHP - m_shieldCurrentHP);
-	//}
+	//強化値が0以下の時強化モード解除
+	if (m_enhancePoint <= 0)
+	{
+		m_isEnhanced = false;
+		m_shieldRestoreCnt = 0;
+		m_enhanceEffectAnime.reset();
+	}
 
-	////強化値が0以下の時強化モード解除
-	//if (m_enhancePoint <= 0)
-	//{
-	//	m_isEnhanced = false;
-	//	m_shieldRestoreCnt = 0;
-	//	m_enhanceEffectAnime.reset();
-	//}
-
-	//m_enhanceEffectAnime.update();
+	m_enhanceEffectAnime.update();
 
 }
 
@@ -49,6 +38,11 @@ void Player::draw() const
 {
 	TextureAsset(U"player").scaled(m_playerSize).rotated(m_position.theta).drawAt(m_position);
 	m_shield.draw();
+
+	if(m_isEnhanced)
+	{
+		m_enhanceEffectAnime.drawAt(m_position);
+	}
 }
 
 void Player::move(Vec2 moveInput)
