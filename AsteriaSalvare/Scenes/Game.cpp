@@ -4,7 +4,6 @@
 Game::Game(const InitData& init)
 	: IScene{ init }
 {
-	AudioAsset(U"gameBgm").setVolume(0.1);
 }
 
 void Game::update()
@@ -22,6 +21,7 @@ void Game::update()
 #endif
 
 	//BGM再生
+	AudioAsset(U"gameBgm").setVolume(0.1);
 	AudioAsset(U"gameBgm").play();
 
 	//ゲームの状態遷移

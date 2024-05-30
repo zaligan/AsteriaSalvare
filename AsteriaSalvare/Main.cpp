@@ -44,7 +44,7 @@ void Main()
 	manager.init(State::Game);
 
 	//調整用無敵モード、通常プレイ時はコメントアウト
-	manager.get()->testMode = true;
+	//manager.get()->testMode = true;
 
 
 	//メインループ

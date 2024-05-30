@@ -32,7 +32,7 @@ public:
 	{
 		m_attackTimer += deltaTime;
 		m_hPBar.update();
-		m_attackLevel = Min(5, m_upgradeItem[ItemType::AttackUpgrade] / 5);
+		m_attackLevel = Min(5, m_upgradeItem[ItemType::AttackUpgrade] / m_attackItemsNeeded);
 	}
 
 	void shot(Array<Bullet>& bulletArr)
@@ -130,8 +130,11 @@ private:
 		{ItemType::ShieldUpgrade,0},
 		{ItemType::SpecialUpgrade,0},
 	};
-	//街が１度に発射する弾数(0以上5以下)
+	/// @brief 街が１度に発射する弾数(0以上5以下)
 	int32 m_attackLevel = 0;
+
+	/// @brief 攻撃アップグレードに必要なアイテム数
+	int32 m_attackItemsNeeded = 3;
 
 	/// @brief 攻撃力
 	static constexpr double m_attackValue = 100.0;

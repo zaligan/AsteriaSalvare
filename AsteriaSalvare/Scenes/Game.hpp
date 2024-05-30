@@ -80,7 +80,7 @@ private:
 	/// @brief 衝突範囲とテクスチャを合わせるオフセット値です
 	static constexpr Circular townPosOffset{ 30,0 };
 
-	EnemyManger m_enemyManager{ player };
+	EnemyManger m_enemyManager{ player, clearTime };
 
 	ItemManager m_itemManager;
 

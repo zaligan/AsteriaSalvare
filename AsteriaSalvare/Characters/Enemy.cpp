@@ -82,7 +82,7 @@ bool Enemy::shot(Array<Bullet>& enemyBulletArray, const Vec2& playerPosition)
 		}
 
 		enemyBulletArray << Bullet{ BulletType::Enemy,0, Circle{Arg::center(getCenter()),EnemyBullet::size},direction ,m_bulletDamage };
-//----------------------------
+
 		return true;
 	}
 	return false;

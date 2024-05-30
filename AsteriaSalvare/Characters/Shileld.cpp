@@ -5,6 +5,7 @@ Shield::Shield(Player& player) : m_player(player) {}
 
 void Shield::update()
 {
+	//耐久値が０以下の時アイテム消費をして回復
 	if (m_currentHP <= 0)
 	{
 		if (m_player.getItemCollection()[ItemType::ShieldUpgrade] > 0)
@@ -22,19 +23,14 @@ void Shield::update()
 	if (not m_isActive && m_wasActive)
 	{
 		m_shieldUseAnimation.reset();
-
-		////非強化状態でシールドを解いたら強化ポイントリセット
-		//if (!m_player.isEnhanced())
-		//{
-		//	m_player.resetEnhancePoint();
-		//}
 	}
 
-	//シールドを収納している場合リターン
-	if(not m_isActive) return;
-
 	m_collider.setCenter(m_player.getCenter());
-	m_shieldUseAnimation.update();
+
+	if (m_isActive)
+	{
+		m_shieldUseAnimation.update();
+	}
 }
 
 void Shield::draw()	const

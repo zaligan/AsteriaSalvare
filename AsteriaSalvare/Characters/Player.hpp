@@ -159,9 +159,9 @@ private:
 	/// @brief 所持しているアイテム一覧です
 	HashTable<ItemType,int32> m_itemCollection =
 	{
-		{ItemType::AttackUpgrade,10},
-		{ItemType::ShieldUpgrade,10},
-		{ItemType::SpecialUpgrade,10},
+		{ItemType::AttackUpgrade,0},
+		{ItemType::ShieldUpgrade,0},
+		{ItemType::SpecialUpgrade,0},
 	};
 
 //----------------弾----------------

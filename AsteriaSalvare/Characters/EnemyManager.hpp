@@ -8,7 +8,7 @@
 class EnemyManger
 {
 public:
-	EnemyManger(const Player& player);
+	EnemyManger(const Player& player, double clearTime);
 
 	/// @brief EnemyManagerを更新します
 	/// @param deltaTime 前フレームからの経過時間を渡します
@@ -20,10 +20,9 @@ public:
 	/// @brief 敵の弾を描画します
 	void enemyBulletDraw() const;
 
-	Array<Enemy>& getEnemyArray()
-	{
-		return m_enemyArray;
-	}
+	/// @brief TODO:参照を返さないように変更する
+	/// @return 敵の配列を返します
+	Array<Enemy>& getEnemyArray();
 
 	/// @brief 弾が他オブジェクトと衝突した時の処理を行います
 	/// @param func 衝突時に他オブジェクト側で行う処理をラムダ式で渡します,戻り値が true なら弾を削除します
@@ -44,13 +43,13 @@ private:
 	/// @brief 経過時間に応じてスポーンさせる敵の数を計算します
 	/// @param currentTime ゲームシーン開始からの経過時間
 	/// @return 一度のスポーンで出現させる敵の数
-	int32 enemySpawnCalk(double currentTime)
-	{
-		return 5;
-	}
+	int32 enemySpawnCalk(double currentTime);
 
 	/// @brief プレイヤーの参照です
 	const Player& m_player;
+
+	/// @brief クリアまでの制限時間です
+	double m_clearTime;
 
 	/// @brief 前フレームからの経過時間です
 	double m_deltaTime = 0;
@@ -70,11 +69,11 @@ private:
 	/// @brief 敵のスポーン時間を計測します
 	double m_spawnTimer = 0;
 
-	/// @brief 一度のスポーンで出現させる敵の数です
-	static constexpr int32 m_baseSpawnNum = 1;
+	/// @brief 一度のスポーンで出現させる敵の数の基準値です
+	static constexpr double m_baseSpawnNum = 2;
 
 	/// @brief 敵をスポーンさせる時間間隔です
-	static constexpr double m_spawnIntervalSeconds = 1.0;
+	static constexpr double m_spawnIntervalSeconds = 1.5;
 
 	/// @brief 敵が出現する地表からの最長距離です
 	static constexpr double m_maxSpawnR = 330;

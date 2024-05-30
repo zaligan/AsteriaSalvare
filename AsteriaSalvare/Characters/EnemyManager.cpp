@@ -1,6 +1,6 @@
 ﻿# include "EnemyManager.hpp"
 
-EnemyManger::EnemyManger(const Player& player) : m_player(player)
+EnemyManger::EnemyManger(const Player& player, double clearTime) : m_player(player), m_clearTime(clearTime)
 {
 }
 
@@ -42,6 +42,10 @@ void EnemyManger::enemyBulletDraw() const
 	}
 }
 
+Array<Enemy>& EnemyManger::getEnemyArray()
+{
+	return m_enemyArray;
+}
 
 void EnemyManger::processBulletCollisions(std::function<bool(Bullet&)> func)
 {
@@ -109,4 +113,9 @@ void EnemyManger::removeDeadEnemies()
 			++it;
 		}
 	}
+}
+
+int32 EnemyManger::enemySpawnCalk(double currentTime)
+{
+	return static_cast<int32>(pow(m_baseSpawnNum, currentTime / 20));
 }

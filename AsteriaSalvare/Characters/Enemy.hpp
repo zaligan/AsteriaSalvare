@@ -88,7 +88,7 @@ private:
 	static constexpr double m_bulletDamage = 10.0;
 
 	/// @brief 攻撃間隔(秒)です
-	static constexpr double m_eShotCoolTime = 3.0;
+	static constexpr double m_eShotCoolTime = 8.0;
 
 	/// @brief スポーンしてから攻撃した合計数です
 	int32 m_shotCnt = 0;
