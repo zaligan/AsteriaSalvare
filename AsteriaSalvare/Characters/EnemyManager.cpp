@@ -1,4 +1,4 @@
-﻿# include "EnemyManager.hpp";
+﻿# include "EnemyManager.hpp"
 
 EnemyManger::EnemyManger(const Player& player) : m_player(player)
 {
@@ -41,6 +41,7 @@ void EnemyManger::enemyBulletDraw() const
 		TextureAsset(U"enemyBullet").drawAt(bullet.collider.center);
 	}
 }
+
 
 void EnemyManger::processBulletCollisions(std::function<bool(Bullet&)> func)
 {

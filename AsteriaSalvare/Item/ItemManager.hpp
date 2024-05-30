@@ -7,6 +7,8 @@ class ItemManager
 public:
 	ItemManager(){}
 
+	/// @brief ステージ上アイテムの更新を行います
+	/// @param deltaTime 前フレームからの経過時間
 	void update(double deltaTime)
 	{
 		for (auto& item : m_stageItemArray)
@@ -19,6 +21,7 @@ public:
 		}
 	}
 
+	/// @brief アイテムを描画します
 	void draw() const
 	{
 		for (auto& item : m_stageItemArray)
@@ -77,11 +80,15 @@ public:
 		return;
 	}
 
+	/// @brief ステージ上にあるアイテムを取得します
+	/// @return ステージ上にあるアイテムの配列
 	Array<StageItem>& getStageItem()
 	{
 		return m_stageItemArray;
 	}
 private:
+
+	/// @brief ステージ上にあるアイテムの配列です
 	Array<StageItem> m_stageItemArray;
 
 	/// @brief アイテムが落下してくる速度です。

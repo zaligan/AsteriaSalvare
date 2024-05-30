@@ -33,18 +33,16 @@ public:
 	double getHP() const;
 
 	/// @brief プレイヤーにダメージを与えます
-	/// @param damege 受けるダメージ量です
-	void damage(double damege);
+	/// @param damage 受けるダメージ量です
+	void damage(double damage);
 
 	/// @brief プレイヤーの中心座標をVec2で返します
 	/// @return Vec2型のプレイヤー中心座標
 	Vec2 getCenter() const;
 
-
 	/// @brief プレイヤーの中心座標をCircularで返します
 	/// @return Circular型のプレイヤー中心座標
 	Circular getCircular() const;
-
 
 	/// @brief マップ中央からプレイヤーの距離を返します
 	/// @return マップ中央からプレイヤーの距離
@@ -85,8 +83,9 @@ public:
 	/// @param value 減らす数
 	void removeItem(ItemType itemType,int32 value);
 
-	/// @brief 所持アップグレード数をすべて0にする
-	void resetUpgrade();
+	/// @brief アップグレードアイテムをリセットします
+	/// @param itemType リセットするアップグレードの種類
+	void resetUpgrade(ItemType itemType);
 
 
 	/// @brief 所持アップグレード数を返します
@@ -95,100 +94,94 @@ public:
 
 	bool isEnhanced();
 
-
-	//TODO:関数名と引数名が適切か確認
-	void setEnhancePoint(int32 point);
-
-	//TODO:関数名と引数名が適切か確認
 	void resetEnhancePoint();
 
 private:
 
+	/// @brief シールドです
 	Shield m_shield;
 
-	//１フレームの時間です
+	/// @brief 前フレームからの経過時間です
 	double m_deltaTime = 0;
 
-	//プレイヤーの中心座標(半径、回転角)です
+	/// @brief プレイヤーの中心座標(半径、回転角)です
 	Circular m_position{ StageInfo::stageRadius,0 };
 
-	//プレイヤーの衝突範囲です
+	/// @brief プレイヤーの衝突範囲です
 	Circle m_collider{ 0,0,m_playerSize * 10 };
 
-	//上下方向のプレイヤーが動ける範囲
+	/// @brief 上下方向のプレイヤーが動ける範囲
 	struct MoveRange
 	{
 		double minRadius;
 		double maxRadius;
 	};
+
+	/// @brief プレイヤーが動ける範囲です
 	static constexpr MoveRange m_moveRange{ 100,StageInfo::stageRadius + 200 };
 
-	//上下方向の移動速度です
+	/// @brief 上下方向の移動速度です
 	static constexpr double m_vertSpeed = 200.0;
 
-	//左右方向の移動速度です,MoveRangeによって変化
-	//プレイヤーが,minRadiusにいる時１周にかかる秒数
+	/// @brief 左右方向の最大移動速度です,プレイヤーが,minRadiusにいる時１周にかかる秒数
 	static constexpr double m_maxRotateSpeed = 3.0;
-	//プレイヤーが,maxRadiusにいる時１周にかかる秒数
+
+	/// @brief 左右方向の最小移動速度です,プレイヤーが,maxRadiusにいる時１周にかかる秒数
 	static constexpr double m_minRotateSpeed = 18.0;
 
 	/// @brief プレイヤーの大きさ
 	static constexpr double m_playerSize = 1.3;
 
-	//プレイヤーの最大体力です
+	/// @brief プレイヤーの最大体力です
 	static constexpr double m_maxHP = 1.0;
 
-	//プレイヤーの現在の体力です
+	/// @brief プレイヤーの現在の体力です
 	double m_currentHP = m_maxHP;
 
-	//射撃間隔の時間(秒)です
-	static constexpr double m_shotCoolTime = 0.5;
 
-	//射撃してからの時間を計ります
-	double m_shotTimer = 0.0;
+//----------------強化状態----------------
 
-//-------強化状態--------------------------
-
-	//強化状態のとき,true
+	/// @brief プレイヤーが強化状態のとき true
 	bool m_isEnhanced = false;
 
-	//シールドで吸収した強化値です
+	/// @brief シールドで吸収した強化値です
 	double m_enhancePoint = 0;
 
-	//m_enhancePointがこの値を超えると強化状態
+	/// @brief m_enhancePointがこの値を超えると強化状態
 	double m_enhanceThreshold = 30;
 
-	//m_enhancePointがこの値を超えるとシールド全回復
-	double m_shieldRestoreThreshold = 50;
-
-	//m_enhancePointが,shieldRestoreThresholdを超えた回数
-	int32 m_shieldRestoreCnt = 0;
-
-	//強化状態で発射した時に減るm_enhancePointの量
+	/// @brief 攻撃１発ごとに減る強化値の量です
 	static constexpr double m_shotLostEnhancePoint = 10.0;
 
-	//プレイヤー強化時のエフェクトです
+	/// @brief プレイヤー強化時のエフェクトです
 	Anime m_enhanceEffectAnime{ Point(4,1), TextureAsset(U"enhancedEffect"), 3, 5, 0.04, 0.5 };
 
-	//強化モード時の射撃間隔(秒)です
-	double m_enhancedShotCoolTime = 0.15;
-
-	//アップグレードアイテム
+	/// @brief 所持しているアイテム一覧です
 	HashTable<ItemType,int32> m_itemCollection =
 	{
 		{ItemType::AttackUpgrade,10},
 		{ItemType::ShieldUpgrade,10},
 		{ItemType::SpecialUpgrade,10},
 	};
-//-------弾--------------------
 
-	//通常時の弾の威力
+//----------------弾----------------
+
+	/// @brief 通常時の弾の威力
 	static constexpr double m_bulletDamage = 10.0;
 
-	//強化時の弾の威力
+	/// @brief 通常時の射撃クールタイム(秒)です
+	static constexpr double m_shotCoolTime = 0.5;
+
+	/// @brief 強化時の弾の威力
 	static constexpr double m_enhancedBulletDamage = 20.0;
 
-	//強化した弾のIDです
+	/// @brief 強化時の射撃クールタイム(秒)です
+	double m_enhancedShotCoolTime = 0.15;
+
+	/// @brief 射撃クールタイムを計測します
+	double m_shotTimer = 0.0;
+
+	/// @brief 強化した弾の個別IDです
 	int32 m_enhancedBulletID = 0;
 
 };

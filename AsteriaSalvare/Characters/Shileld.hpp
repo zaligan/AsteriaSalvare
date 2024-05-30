@@ -59,13 +59,12 @@ private:
 	/// @brief シールドの耐久値です
 	double m_currentHP = 0;
 
-	//TODO:pbriefを追加
-	//シールド使用時のアニメーションです
+	/// @brief シールドのアニメーションです
 	Anime m_shieldUseAnimation{ TextureAsset(U"shield"), 4, 5, 0.03, m_size * 0.18 };
 
-	//シールドの衝突範囲です
+	/// @brief シールドの衝突範囲です
 	Circle m_collider{ m_size * 30.0 };
 
-	//アニメーションの位置と衝突範囲の調整用
+	/// @brief アニメーションと衝突範囲の位置調整用
 	Circular m_animePositionOffset{ 3,0 };
 };
