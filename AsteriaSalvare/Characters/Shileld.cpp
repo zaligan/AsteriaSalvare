@@ -41,8 +41,8 @@ void Shield::draw()	const
 {
 	if(not m_isActive) return;
 
-	double colorH = (m_currentHP / 10) + 110;
-	m_collider.draw(ColorF(HSV{ 250 + colorH,0.9,1 }, 0.7));
+	double hpRate = static_cast<double>(m_currentHP) / m_durabilityPerItem;
+	m_collider.draw(ColorF(HSV{ 244 * hpRate, 0.9, 1 }, 0.7 ));
 	m_shieldUseAnimation.drawAt(Circular(m_player.getCircular().r + m_animePositionOffset.r, m_player.getCircular().theta + m_animePositionOffset.theta), m_player.getCircular().theta);
 }
 

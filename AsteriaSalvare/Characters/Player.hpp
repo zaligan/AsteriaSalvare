@@ -176,9 +176,9 @@ private:
 	//アップグレードアイテム
 	HashTable<ItemType,int32> m_itemCollection =
 	{
-		{ItemType::AttackUpgrade,0},
-		{ItemType::ShieldUpgrade,0},
-		{ItemType::SpecialUpgrade,0},
+		{ItemType::AttackUpgrade,10},
+		{ItemType::ShieldUpgrade,10},
+		{ItemType::SpecialUpgrade,10},
 	};
 //-------弾--------------------
 
