@@ -95,11 +95,9 @@ public:
 		return m_attackValue;
 	}
 
-	void addUpgrade(HashTable<ItemType, int32> upgradeItem)
+	void addUpgrade(HashTable<ItemType, int32> upgradeItem, ItemType itemType)
 	{
-		m_upgradeItem[ItemType::AttackUpgrade] += upgradeItem[ItemType::AttackUpgrade];
-		m_upgradeItem[ItemType::ShieldUpgrade] += upgradeItem[ItemType::ShieldUpgrade];
-		m_upgradeItem[ItemType::SpecialUpgrade] += upgradeItem[ItemType::SpecialUpgrade];
+		m_upgradeItem[itemType] += upgradeItem[itemType];
 	}
 
 	/// @brief 衝突範囲を返します

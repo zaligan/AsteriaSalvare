@@ -26,7 +26,6 @@ void Player::update(double deltaTime)
 	if (m_enhancePoint <= 0)
 	{
 		m_isEnhanced = false;
-		m_shieldRestoreCnt = 0;
 		m_enhanceEffectAnime.reset();
 	}
 
@@ -163,14 +162,9 @@ void Player::removeItem(ItemType itemType, int32 value)
 	m_itemCollection[itemType] -= value;
 }
 
-void Player::resetUpgrade()
+void Player::resetUpgrade(ItemType itemType)
 {
-	m_itemCollection =
-	{
-		{ItemType::AttackUpgrade,0},
-		{ItemType::ShieldUpgrade,0},
-		{ItemType::SpecialUpgrade,0}
-	};
+	m_itemCollection[itemType] = 0;
 }
 
 HashTable<ItemType, int32> Player::getUpgradeCnt() const
@@ -181,11 +175,6 @@ HashTable<ItemType, int32> Player::getUpgradeCnt() const
 bool Player::isEnhanced()
 {
 	return m_isEnhanced;
-}
-
-void Player::setEnhancePoint(int32 point)
-{
-	m_enhancePoint += point;
 }
 
 void Player::resetEnhancePoint()

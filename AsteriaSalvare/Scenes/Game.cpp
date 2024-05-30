@@ -198,6 +198,19 @@ void Game::update()
 				return true;
 			}
 
+			//街と敵の弾の衝突処理
+			for (auto i : step(townArray.size()))
+			{
+				if (bullet.collider.intersects(townArray[i].getCollider()))
+				{
+					if (!getData().testMode)
+					{
+						townArray[i].damage(bullet.damage);
+					}
+					return true;
+				}
+			}
+
 			//ステージと敵の弾の衝突処理
 			return bullet.collider.intersects(m_stage);
 
@@ -224,50 +237,10 @@ void Game::update()
 	{
 		if (town.getCollider().intersects(player.getCollider()))
 		{
-			town.addUpgrade(player.getUpgradeCnt());
-			player.resetUpgrade();
+			town.addUpgrade(player.getUpgradeCnt(),ItemType::AttackUpgrade);
+			player.resetUpgrade(ItemType::AttackUpgrade);
 		}
 	}
-
-	
-
-	//e弾hit
-	/*auto& enemyBulletArray = m_enemyManager.getEnemyBulletArray();
-	for (auto it = enemyBulletArray.begin(); it != enemyBulletArray.end();)
-	{
-		bool exist = false;
-		for (auto i : step(townArray.size()))
-		{
-			if (it->collider.intersects(townArray[i].getCollider()))
-			{
-				if (!getData().testMode)
-				{
-					townArray[i].damage(it->damage);
-				}
-				it = enemyBulletArray.erase(it);
-				exist = true;
-				break;
-			}
-		}
-		if (exist)
-		{
-			continue;
-		}
-
-		
-
-		else
-		{
-			if (it->collider.intersects(stage))
-			{
-				it = enemyBulletArray.erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}
-	}*/
 	
 	//town更新
 	for (size_t i = 0; i < townArray.size(); ++i)
