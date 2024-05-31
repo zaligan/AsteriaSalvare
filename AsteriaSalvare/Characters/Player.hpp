@@ -7,6 +7,7 @@
 #include "Item.hpp"
 #include "Volume.hpp"
 
+/// @brief プレイヤーを表すクラスです
 class Player
 {
 public:
@@ -167,13 +168,13 @@ private:
 //----------------弾----------------
 
 	/// @brief 通常時の弾の威力
-	static constexpr double m_bulletDamage = 10.0;
+	static constexpr int32 m_bulletDamage = 10;
 
 	/// @brief 通常時の射撃クールタイム(秒)です
 	static constexpr double m_shotCoolTime = 0.5;
 
 	/// @brief 強化時の弾の威力
-	static constexpr double m_enhancedBulletDamage = 20.0;
+	static constexpr int32 m_enhancedBulletDamage = 20;
 
 	/// @brief 強化時の射撃クールタイム(秒)です
 	double m_enhancedShotCoolTime = 0.15;

@@ -17,7 +17,7 @@ enum class BulletType
 	Town
 };
 
-//敵とプレイヤーの弾のクラスです
+/// @brief 敵とプレイヤーの弾のクラスです
 struct Bullet
 {
 	//弾の種類です
@@ -33,10 +33,10 @@ struct Bullet
 	Vec2 direction;
 
 	//この弾のダメージです
-	double damage;
+	int32 damage;
 };
 
-/// @brief プレイヤーの弾速
+/// @brief プレイヤーの弾情報です
 namespace PlayerBullet
 {
 	static constexpr double size = 6.0;
@@ -44,6 +44,7 @@ namespace PlayerBullet
 	static constexpr double enhancedBulletSize = 9.0;
 }
 
+/// @brief 敵の弾情報です
 namespace EnemyBullet
 {
 	static constexpr double size = 4.0;

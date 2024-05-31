@@ -41,7 +41,7 @@ void Main()
 
 	//----開発用----
 	//Gameシーンから開始する場合、下の行のコメントを外す
-	manager.init(State::Game);
+	//manager.init(State::Game);
 
 	//調整用無敵モード、通常プレイ時はコメントアウト
 	//manager.get()->testMode = true;

@@ -85,7 +85,7 @@ private:
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
 	/// @brief 攻撃力です
-	static constexpr double m_bulletDamage = 10.0;
+	static constexpr int32 m_bulletDamage = 10;
 
 	/// @brief 攻撃間隔(秒)です
 	static constexpr double m_eShotCoolTime = 8.0;

@@ -5,6 +5,7 @@
 //前方宣言
 class Player;
 
+/// @brief プレイヤーのシールドを管理するクラスです
 class Shield
 {
 public:
@@ -57,7 +58,7 @@ private:
 	double m_durabilityPerItem = 1000.0;
 
 	/// @brief シールドの耐久値です
-	double m_currentHP = 0;
+	double m_currentHP = m_durabilityPerItem;
 
 	/// @brief シールドのアニメーションです
 	Anime m_shieldUseAnimation{ TextureAsset(U"shield"), 4, 5, 0.03, m_size * 0.18 };

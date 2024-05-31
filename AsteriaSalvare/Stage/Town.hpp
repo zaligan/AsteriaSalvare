@@ -2,20 +2,22 @@
 #include<Siv3D.hpp>
 #include"StageInfo.hpp"
 #include"HPBar.h"
-#include"Upgrade.hpp"
 #include"Item.hpp"
 
+//TODO:街のタイプに合わせたアップグレードを実装する
+/// @brief 街の種類
 namespace TownType
 {
 	enum Type
 	{
-		Nomal,
+		Normal,
 		Attack,
 		Defense,
 		Special
 	};
 }
 
+/// @brief 街のクラス
 class Town
 {
 public:
@@ -80,7 +82,7 @@ public:
 		return m_hPBar.getHP();
 	}
 
-	void damage(double damage)
+	void damage(int32 damage)
 	{
 		m_hPBar.damage(damage);
 	}
@@ -115,7 +117,7 @@ private:
 	Circle m_collider{ 0,0,StageInfo::townSize};
 
 	/// @brief 街の種類
-	TownType::Type m_townType = TownType::Nomal;
+	TownType::Type m_townType = TownType::Normal;
 
 	/// @brief 最大HP
 	static constexpr int32 m_maxTownHP = 3000;
@@ -137,7 +139,7 @@ private:
 	int32 m_attackItemsNeeded = 3;
 
 	/// @brief 攻撃力
-	static constexpr double m_attackValue = 100.0;
+	static constexpr int32 m_attackValue = 100;
 
 	/// @brief 攻撃のクールタイム
 	static constexpr double m_attackCoolTime = 1.0;

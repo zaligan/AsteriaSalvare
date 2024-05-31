@@ -893,14 +893,14 @@
     <ClInclude Include="Item\ItemManager.hpp">
       <Filter>Source Files\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Volume.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\AssetReader.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Characters\Shileld.hpp">
       <Filter>Source Files\Charactors</Filter>
+    </ClInclude>
+    <ClInclude Include="Volume.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

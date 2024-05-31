@@ -213,8 +213,6 @@ void Game::update()
 
 			//ステージと敵の弾の衝突処理
 			return bullet.collider.intersects(m_stage);
-
-			return false;
 		});
 
 
@@ -263,17 +261,16 @@ void Game::update()
 	
 	//引数の座標はゲーム内ではなく、回転の処理をした後、スケールを変える前の画面上座標
 	camera.setTargetCenter(Circular{player.getR() + cameraOffsetY,0});
-	if (cameraMode)
+
+	if (player.getR()< StageInfo::stageRadius)
 	{
-		if (player.getR()< StageInfo::stageRadius)
-		{
-			camera.setTargetScale(cameraScale * (1 - 0.65 * ((StageInfo::stageRadius - player.getR()) / StageInfo::stageRadius)));
-		}
-		else
-		{
-			camera.setTargetScale(cameraScale);
-		}
+		camera.setTargetScale(cameraScale * (1 - 0.65 * ((StageInfo::stageRadius - player.getR()) / StageInfo::stageRadius)));
 	}
+	else
+	{
+		camera.setTargetScale(cameraScale);
+	}
+	
 
 	mat = Mat3x2::Rotate(-player.getTheta(), {0,0});
 	camera.update();
@@ -304,16 +301,20 @@ void Game::draw() const
 			double townRotate = Math::ToRadians(i * (360/townArray.size()));
 			switch (townArray[i].getTownType())
 			{
-			case TownType::Nomal:
-				TextureAsset(U"town").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
+			case TownType::Normal:
+				TextureAsset(U"normalTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
 				break;
 			case TownType::Attack:
+				TextureAsset(U"attackTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
 				break;
 			case TownType::Defense:
+				TextureAsset(U"defenseTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
 				break;
 			case TownType::Special:
+				TextureAsset(U"specialTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
 				break;
 			default:
+				throw Error(U"街のタイプが正しくないため描画できません");
 				break;
 			}
 		}
@@ -359,21 +360,6 @@ void Game::draw() const
 	//残り時間
 	FontAsset(U"townHPFont")(U"{:.0f}"_fmt(Max(0.0, clearTime - sceneTime) )).drawAt(80,Scene::Center().x, 80);
 
-	//街のHP
-	double interval = 180;
-	Array<String> townNameArr = { U"普通の街 HP",U"攻撃の街 HP" ,U"防御の街 HP" ,U"特殊の街 HP" };
-	for (int i = 0; i < townArray.size(); i++)
-	{
-		RoundRect{ i*interval + 600,1020,180,60,10 }.draw(Palette::Gray);
-		FontAsset(U"townHPFont")(townNameArr.at(i)).drawAt(i * interval + 690, 1030);
-	}
-	for (size_t i = 0; i < townArray.size(); i++)
-	{
-		const double x = interval * i;
-		const double y = 0;
-		const RectF rect = RectF{ x, y, 150, 16 }.movedBy(615, 1050);
-		townArray.at(i).drawHPBar(rect);
-	}
 
 	//プレイヤー強化
 	for (auto i : step(3))
@@ -399,18 +385,54 @@ void Game::draw() const
 	TextureAsset(U"shieldUpgrade").scaled(0.05).drawAt(930, 980);
 	TextureAsset(U"specialUpgrade").scaled(0.05).drawAt(1030, 980);
 
+	//街のHP
+	double interval = 180;
+	Array<String> townNameArr = { U"普通の街 HP",U"攻撃の街 HP" ,U"防御の街 HP" ,U"特殊の街 HP" };
+	for (int i = 0; i < townArray.size(); i++)
+	{
+		RoundRect{ i*interval + 600,1020,180,60,10 }.draw(Palette::Gray);
+		FontAsset(U"townHPFont")(townNameArr.at(i)).drawAt(i * interval + 690, 1030);
+
+		switch (townArray[i].getTownType())
+		{
+		case TownType::Normal:
+			TextureAsset(U"normalTown").scaled(0.08).drawAt(620,1020);
+			break;
+		case TownType::Attack:
+			TextureAsset(U"attackTown").scaled(0.08).drawAt(800, 1020);
+			break;
+		case TownType::Defense:
+			TextureAsset(U"defenseTown").scaled(0.08).drawAt(980, 1020);
+			break;
+		case TownType::Special:
+			TextureAsset(U"specialTown").scaled(0.08).drawAt(1160, 1020);
+			break;
+		default:
+			throw Error(U"街のタイプが正しくないため描画できません");
+			break;
+		}
+	}
+	for (size_t i = 0; i < townArray.size(); i++)
+	{
+		const double x = interval * i;
+		const double y = 0;
+		const RectF rect = RectF{ x, y, 150, 16 }.movedBy(615, 1050);
+		townArray.at(i).drawHPBar(rect);
+	}
+
 	//GameOver
 	switch (gameState)
 	{
 	case GameState::play:
 		break;
 	case GameState::gameOver:
-		font(U"GMAE OVER").drawAt(Scene::Center(), Palette::Gray);
-		font(U"Press J Key").drawAt(40, { Scene::Center().x,Scene::Center().y + 100 }, Palette::Gray);
+		//TODO:見やすいフォントとサイズに変更
+		FontAsset(U"gameOver")(U"GMAE OVER").drawAt(Scene::Center(), Palette::Gray);
+		FontAsset(U"gameOver")(U"Press J Key").drawAt(40, { Scene::Center().x,Scene::Center().y + 100 }, Palette::Gray);
 		break;
 	case GameState::clear:
-		font(U"CLEAR!").drawAt(Scene::Center(), Palette::Gray);
-		font(U"Press J Key").drawAt(40, { Scene::Center().x,Scene::Center().y + 100 }, Palette::Gray);
+		FontAsset(U"gameClear")(U"CLEAR!").drawAt(Scene::Center(), Palette::Gray);
+		FontAsset(U"gameClear")(U"Press J Key").drawAt(40, { Scene::Center().x,Scene::Center().y + 100 }, Palette::Gray);
 		break;
 	default:
 		break;

@@ -2,6 +2,7 @@
 # include <Siv3D.hpp>
 # include "Item.hpp"
 
+/// @brief アイテムの管理を行うクラスです
 class ItemManager
 {
 public:
@@ -59,7 +60,7 @@ public:
 				continue;
 			}
 
-			ItemType dropItem;
+			ItemType dropItem{};
 			switch (itemDropChance)
 			{
 			case 0:
@@ -72,6 +73,7 @@ public:
 				dropItem = ItemType::SpecialUpgrade;
 				break;
 			default:
+				throw Error(U"アイテムのドロップに失敗しました");
 				break;
 			}
 
