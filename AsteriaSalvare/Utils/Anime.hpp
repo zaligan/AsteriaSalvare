@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include<Siv3D.hpp>
+#include <Siv3D.hpp>
 
 /// @brief スプライトシートを用いてアニメーションを表示します
 class Anime

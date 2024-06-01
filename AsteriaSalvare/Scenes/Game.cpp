@@ -286,7 +286,9 @@ void Game::draw() const
 		const auto t0 = camera.createTransformer();
 		const Transformer2D t1{ mat,TransformCursor::Yes };
 
+		//背景
 		TextureAsset(U"gameBackGround").scaled(1.0).drawAt(0, 0);
+
 		//ステージ
 		m_stage.draw(Palette::Saddlebrown);
 		for (int i = 0; i < 100; i++)

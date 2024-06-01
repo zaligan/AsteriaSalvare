@@ -1,6 +1,6 @@
-﻿# pragma once
-# include <Siv3D.hpp>
-# include "Item.hpp"
+﻿#pragma once
+#include <Siv3D.hpp>
+#include "Item.hpp"
 
 /// @brief アイテムの管理を行うクラスです
 class ItemManager

@@ -1,5 +1,5 @@
 ﻿#pragma once
-# include <Siv3D.hpp> // Siv3D v0.6.14
+#include <Siv3D.hpp> // Siv3D v0.6.14
 
 /// @brief TSV形式のテキストファイルを読み込み、アセットを登録します。
 class AssetReader

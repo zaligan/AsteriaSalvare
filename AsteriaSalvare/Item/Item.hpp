@@ -1,5 +1,5 @@
-﻿# pragma once
-# include <Siv3D.hpp>
+﻿#pragma once
+#include <Siv3D.hpp>
 
 /// @brief アイテムの種類を表します
 enum class ItemType

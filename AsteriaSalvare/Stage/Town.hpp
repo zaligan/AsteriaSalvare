@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include<Siv3D.hpp>
-#include"StageInfo.hpp"
-#include"HPBar.h"
-#include"Item.hpp"
+#include <Siv3D.hpp>
+#include "StageInfo.hpp"
+#include "HPBar.h"
+#include "Item.hpp"
 
 //TODO:街のタイプに合わせたアップグレードを実装する
 /// @brief 街の種類

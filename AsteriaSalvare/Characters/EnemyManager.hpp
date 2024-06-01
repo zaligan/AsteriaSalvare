@@ -1,8 +1,8 @@
 ﻿#pragma once
-# include <Siv3D.hpp>
-# include "Enemy.hpp"
-# include "Player.hpp"
-# include "ItemManager.hpp"
+#include <Siv3D.hpp>
+#include "Enemy.hpp"
+#include "Player.hpp"
+#include "ItemManager.hpp"
 
 /// @brief 敵と敵の弾を管理します
 class EnemyManger

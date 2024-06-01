@@ -1,5 +1,5 @@
-﻿# pragma once
-# include <Siv3D.hpp>
+﻿#pragma once
+#include <Siv3D.hpp>
 
 //弾の種類を表します
 enum class BulletType

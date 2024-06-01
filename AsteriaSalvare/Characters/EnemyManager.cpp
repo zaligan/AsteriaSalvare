@@ -1,4 +1,4 @@
-﻿# include "EnemyManager.hpp"
+﻿#include "EnemyManager.hpp"
 
 EnemyManger::EnemyManger(const Player& player, double clearTime) : m_player(player), m_clearTime(clearTime)
 {

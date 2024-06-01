@@ -1,12 +1,12 @@
 ﻿#pragma once
-# include "Anime.hpp"
-# include "Common.hpp"
-# include "EnemyManager.hpp"
-# include "ItemManager.hpp"
-# include "HPBar.h"
-# include "Player.hpp"
-# include "StageInfo.hpp"
-# include "Town.hpp"
+#include "Anime.hpp"
+#include "Common.hpp"
+#include "EnemyManager.hpp"
+#include "ItemManager.hpp"
+#include "HPBar.h"
+#include "Player.hpp"
+#include "StageInfo.hpp"
+#include "Town.hpp"
 
 /// @brief ゲームシーン
 class Game : public App::Scene
