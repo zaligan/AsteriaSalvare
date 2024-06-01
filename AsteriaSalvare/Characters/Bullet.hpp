@@ -31,9 +31,6 @@ struct Bullet
 
 	// 進行方向を表す単位ベクトルです
 	Vec2 direction;
-
-	//この弾のダメージです
-	int32 damage;
 };
 
 /// @brief プレイヤーの弾情報です
@@ -41,7 +38,11 @@ namespace PlayerBullet
 {
 	static constexpr double size = 6.0;
 	static constexpr double speed = 400.0;
+	static constexpr int32 damage = 10;
+
 	static constexpr double enhancedBulletSize = 9.0;
+	static constexpr double enhancedBulletSpeed = 500.0;
+	static constexpr int32 enhancedBulletDamage = 20;
 }
 
 /// @brief 敵の弾情報です
@@ -49,5 +50,6 @@ namespace EnemyBullet
 {
 	static constexpr double size = 4.0;
 	static constexpr double speed = 40.0;
+	static constexpr int32 damage = 10;
 }
 

@@ -59,7 +59,7 @@ public:
 		if (m_attackLevel == 1)
 		{
 			Vec2 direction = Vec2(Circular{ 1,m_position.theta }).normalized();
-			bulletArr << Bullet{ BulletType::Town,0,bulletCollider,direction,m_attackValue };
+			bulletArr << Bullet{ BulletType::Town, 0, bulletCollider, direction };
 			return;
 		}
 
@@ -67,8 +67,8 @@ public:
 		for (int32 i : step(m_attackLevel))
 		{
 			double degrees = -15.0 * m_attackLevel + i * 30.0 * m_attackLevel / (m_attackLevel - 1.0);
-			Vec2 direction = Vec2(Circular{ 1,ToRadians(degrees) + m_position.theta }).normalized();
-			bulletArr << Bullet{ BulletType::Town,0,bulletCollider,Vec2{direction}.normalized(),m_attackValue};
+			Vec2 direction = Vec2(Circular{ 1, ToRadians(degrees) + m_position.theta }).normalized();
+			bulletArr << Bullet{ BulletType::Town, 0, bulletCollider, Vec2{direction}.normalized() };
 		}
 	}
 

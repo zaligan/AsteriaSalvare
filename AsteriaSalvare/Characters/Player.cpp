@@ -62,7 +62,7 @@ void Player::shot(Array<Bullet>& bulletArr)
 
 			Vec2 direction = Vec2(Circular{ 1,getTheta() }).normalized();
 
-			bulletArr << Bullet{ BulletType::Enhanced,m_enhancedBulletID,Circle{getCenter(),PlayerBullet::enhancedBulletSize}, direction ,m_enhancedBulletDamage };
+			bulletArr << Bullet{ BulletType::Enhanced,m_enhancedBulletID,Circle{getCenter(),PlayerBullet::enhancedBulletSize}, direction };
 
 			m_enhancedBulletID++;
 
@@ -80,7 +80,7 @@ void Player::shot(Array<Bullet>& bulletArr)
 
 			Vec2 direction = Vec2(Circular{ 1,getTheta() }).normalized();
 
-			bulletArr << Bullet{ BulletType::Normal,0,Circle{getCenter(),PlayerBullet::size}, direction ,m_bulletDamage };
+			bulletArr << Bullet{ BulletType::Normal,0,Circle{getCenter(),PlayerBullet::size}, direction };
 
 			AudioAsset(U"playerShoot").playOneShot(Volume::playerShot, 0, 1.0);
 		}
