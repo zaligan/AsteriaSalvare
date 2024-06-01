@@ -42,9 +42,13 @@ void EnemyManger::enemyBulletDraw() const
 	}
 }
 
-Array<Enemy>& EnemyManger::getEnemyArray()
+void EnemyManger::processEnemyCollisions(std::function<double(Enemy&)> func)
 {
-	return m_enemyArray;
+	for (auto& enemy : m_enemyArray)
+	{
+		//敵が他オブジェクトと衝突した時の処理
+		enemy.damage(func(enemy));
+	}
 }
 
 void EnemyManger::processBulletCollisions(std::function<bool(Bullet&)> func)

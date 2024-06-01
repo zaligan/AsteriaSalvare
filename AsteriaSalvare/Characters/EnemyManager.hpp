@@ -20,9 +20,9 @@ public:
 	/// @brief 敵の弾を描画します
 	void enemyBulletDraw() const;
 
-	/// @brief TODO:参照を返さないように変更する
-	/// @return 敵の配列を返します
-	Array<Enemy>& getEnemyArray();
+	/// @brief 敵が他オブジェクトと衝突した時の処理を行います
+	/// @param func 衝突時に他オブジェクト側で行う処理をラムダ式で渡します,戻り値は敵に与えるダメージ量です 
+	void processEnemyCollisions(std::function<double(Enemy&)> func);
 
 	/// @brief 弾が他オブジェクトと衝突した時の処理を行います
 	/// @param func 衝突時に他オブジェクト側で行う処理をラムダ式で渡します,戻り値が true なら弾を削除します

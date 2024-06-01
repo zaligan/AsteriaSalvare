@@ -110,63 +110,71 @@ void Game::update()
 	
 
 	//弾の更新
-	for (auto bulletIter = playerBulletArray.begin(); bulletIter != playerBulletArray.end();)
+	for (auto it = playerBulletArray.begin(); it != playerBulletArray.end();)
 	{
 		//移動
-		Vec2 update(bulletIter->direction * PlayerBullet::speed * deltaTime);
-		Line trajectory{ bulletIter->collider.center,bulletIter->collider.center + update };
-		bulletIter->collider.setCenter(bulletIter->collider.center + update);
+		Vec2 update(it->direction * PlayerBullet::speed * deltaTime);
+		Line trajectory{ it->collider.center,it->collider.center + update };
+		it->collider.setCenter(it->collider.center + update);
 
 		//弾自身が範囲外なら削除
-		if (bulletIter->collider.x < -StageInfo::bulletDeleteRange || StageInfo::bulletDeleteRange < bulletIter->collider.x || bulletIter->collider.y < -StageInfo::bulletDeleteRange || bulletIter->collider.y > StageInfo::bulletDeleteRange)
+		if (it->collider.x < -StageInfo::bulletDeleteRange || StageInfo::bulletDeleteRange < it->collider.x || it->collider.y < -StageInfo::bulletDeleteRange || it->collider.y > StageInfo::bulletDeleteRange)
 		{
-			bulletIter = playerBulletArray.erase(bulletIter);
+			it = playerBulletArray.erase(it);
 			continue;
 		}
+		it++;
+	}
 
-		//弾と敵の衝突処理
-		bool isHit = false;
-		auto& enemyArray = m_enemyManager.getEnemyArray();
-		for (auto enemyIter = enemyArray.begin(); enemyIter != enemyArray.end();)
+	m_enemyManager.processEnemyCollisions([this](Enemy& enemy) -> double
 		{
-			if ((Geometry2D::Distance(trajectory, enemyIter->getCenter()) < bulletIter->collider.r + enemyIter->getCollider().r) && enemyIter->getHP() > 0)
+			//プレイヤーと敵の衝突処理
+			if (enemy.getCollider().intersects(player.getCollider()))
 			{
-				switch (bulletIter->type)
+				if (!getData().testMode)
 				{
-				case BulletType::Normal:
-					enemyIter->damage(bulletIter->damage);
-					bulletIter = playerBulletArray.erase(bulletIter);
-					isHit = true;
-					break;
+					player.damage(EnemyBullet::damage);
+				}
 
-				case BulletType::Enhanced:
-					if (!enemyIter->isHitThisBullet(bulletIter->ID))
+				return PlayerBullet::damage;
+			}
+	
+			//プレイヤーの弾と敵の衝突処理
+			for (auto it = playerBulletArray.begin(); it != playerBulletArray.end();)
+			{
+				if (enemy.getCollider().intersects(it->collider))
+				{
+					switch (it->type)
 					{
-						enemyIter->damage(bulletIter->damage);
+						case BulletType::Normal:
+							it = playerBulletArray.erase(it);
+							return PlayerBullet::damage;
+							
+						case BulletType::Enhanced:
+							if (!enemy.isHitThisBullet(it->ID))
+							{
+								it++;
+								return PlayerBullet::enhancedBulletDamage;
+							}
+							it++;
+							break;
+
+						case BulletType::Town:
+							it = playerBulletArray.erase(it);
+							return PlayerBullet::damage;
+
+						default:
+							break;
 					}
-					break;
-
-				case BulletType::Town:
-					enemyIter->damage(bulletIter->damage);
-					bulletIter = playerBulletArray.erase(bulletIter);
-					isHit = true;
-					break;
-
-				default:
-					break;
+				}
+				else
+				{
+					it++;
 				}
 			}
-			enemyIter++;
-			if (isHit)
-			{
-				break;
-			}
-		}
-		if (!isHit)
-		{
-			bulletIter++;
-		}
-	}
+
+			return 0.0;
+		});
 
 	//敵の更新
 	m_enemyManager.update(deltaTime);
@@ -183,8 +191,8 @@ void Game::update()
 			//シールドと敵の弾の衝突処理
 			if (player.isShieldActive() && bullet.collider.intersects(player.getShieldCollider()))
 			{
-				player.shieldDamage(bullet.damage);
-				player.addEnhancePoint(bullet.damage / 10);
+				player.shieldDamage(EnemyBullet::damage);
+				player.addEnhancePoint(EnemyBullet::damage / 10);
 				return true;
 			}
 
@@ -193,7 +201,7 @@ void Game::update()
 			{
 				if (!getData().testMode)
 				{
-					player.damage(bullet.damage);
+					player.damage(EnemyBullet::damage);
 				}
 				return true;
 			}
@@ -205,7 +213,7 @@ void Game::update()
 				{
 					if (!getData().testMode)
 					{
-						townArray[i].damage(bullet.damage);
+						townArray[i].damage(EnemyBullet::damage);
 					}
 					return true;
 				}

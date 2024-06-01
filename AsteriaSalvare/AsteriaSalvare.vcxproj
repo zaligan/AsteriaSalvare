@@ -352,6 +352,7 @@
     <ClInclude Include="Utils\Anime.hpp" />
     <ClInclude Include="Utils\AssetReader.hpp" />
     <ClInclude Include="Utils\HPBar.h" />
+    <ClInclude Include="Utils\InputManager.hpp" />
     <ClInclude Include="Volume.hpp" />
   </ItemGroup>
   <ItemGroup>
