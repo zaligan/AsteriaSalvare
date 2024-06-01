@@ -13,11 +13,9 @@ public:
 	Shield(Player& player);
 
 	/// @brief シールドを更新します
-	/// @param useShield trueの時シールドを展開します
 	void update();
 
 	/// @brief シールドを描画します
-	/// @param pos 描画する位置です
 	void draw() const;
 
 	/// @brief シールドを展開します
