@@ -13,4 +13,5 @@ public:
 	void draw() const override;
 
 private:
+	InputGroup m_input = (KeyJ | XInput(0).buttonA);
 };

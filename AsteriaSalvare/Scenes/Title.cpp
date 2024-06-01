@@ -10,7 +10,7 @@ Title::Title(const InitData& init)
 void Title::update()
 {
 	ClearPrint();
-	if (KeyJ.pressed())
+	if (m_input.pressed())
 	{
 		AudioAsset(U"titleButton").play();
 		changeScene(State::Game);
