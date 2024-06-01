@@ -103,7 +103,7 @@ void EnemyManger::removeDeadEnemies()
 
 	for (auto it = m_enemyArray.begin(); it != m_enemyArray.end();)
 	{
-		if (it->isDead())
+		if (it->isReadyToDelete())
 		{
 			m_deadEnemyPosition << it->getCenter();
 			it = m_enemyArray.erase(it);

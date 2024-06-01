@@ -340,7 +340,6 @@
     <ClInclude Include="Characters\EnemyManager.hpp" />
     <ClInclude Include="Characters\Player.hpp" />
     <ClInclude Include="Characters\Shileld.hpp" />
-    <ClInclude Include="Figure.h" />
     <ClInclude Include="Item\Item.hpp" />
     <ClInclude Include="Item\ItemManager.hpp" />
     <ClInclude Include="Scenes\Common.hpp" />
@@ -349,6 +348,7 @@
     <ClInclude Include="Stage\StageInfo.hpp" />
     <ClInclude Include="Stage\Town.hpp" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UIGameScene.hpp" />
     <ClInclude Include="Utils\Anime.hpp" />
     <ClInclude Include="Utils\AssetReader.hpp" />
     <ClInclude Include="Utils\HPBar.h" />

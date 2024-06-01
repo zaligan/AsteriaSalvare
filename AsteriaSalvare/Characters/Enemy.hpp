@@ -32,7 +32,7 @@ public:
 	/// @brief 体力を計算します
 	/// @param damage 受けるダメージです
 	/// @return 体力が0以下の時,true
-	bool damage(double damage);
+	void damage(double damage);
 
 	/// @brief 現在の体力を返します
 	/// @return 現在の体力
@@ -47,6 +47,10 @@ public:
 	/// @brief 敵の生死を返します
 	/// @return 敵が死んでいる時,true
 	bool isDead() const;
+
+	/// @brief 敵が削除可能か確認します
+	/// @return 敵が削除可能な時,true
+	bool isReadyToDelete() const;
 
 	/// @brief 衝突判定のためのCircleを返します。
 	/// @return 衝突判定のためのCircle
@@ -97,10 +101,16 @@ private:
 	static constexpr double m_enemyHouseRange = StageInfo::enemyHouseRange;
 
 	/// @brief 自身の体力が０以下の時,trueとなります
-	bool m_deadFlag = false;
+	bool m_isDead = false;
+
+	/// @brief m_isDeadの前フレームの値です
+	bool m_wasDead = false;
+
+	/// @brief 自身を削除する準備ができた時,trueとなります
+	bool m_readyToDelete = false;
 
 	/// @brief 破壊された時のアニメーションです
-	Anime m_explosionAnime{ TextureAsset(U"explosion"), 2, 8, 0.03,0.35,AudioAsset(U"enemyDead") };
+	Anime m_explosionAnime{ TextureAsset(U"explosion"), 2, 8, 0.03, 0.35 };
 
 	/// @brief 受けたプレイヤーの貫通弾の個別IDを記録します
 	Array<int32> m_hitEnhancedBulletArr;

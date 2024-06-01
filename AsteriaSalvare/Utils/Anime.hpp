@@ -29,25 +29,8 @@ public:
 		m_resize(resize),
 		m_index({ 0,0 }) {}
 
-	/// @brief 効果音付きAnimeを作成します
-	/// @param texture 表示するテクスチャです
-	/// @param rowSize textureが持つコマの行数です
-	/// @param majorSize textureが持つコマの列数です
-	/// @param frmTime １コマの描画時間です(秒)
-	/// @param resize テクスチャの表示倍率です
-	/// @param audioPath 再生時に鳴らす効果音です
-	Anime(const Texture& texture, int32 rowSize, int32 majorSize, double frmTime, double resize, const Audio& audio) :
-		m_reStartIndex(Point(majorSize - 1, rowSize - 1)),
-		m_texture(texture),
-		m_majorSize(majorSize),
-		m_rowSize(rowSize),
-		m_frmTime(frmTime),
-		m_resize(resize),
-		m_index({ 0,0 }),
-		m_audio(audio) {}
-
 	/// @brief テクスチャのアニメーション、効果音の再生を行います。
-	/// @return アニメーションの再生が終わるとtrueを返します
+	/// @return アニメーションの再生が終わると true を返します
 	bool update()
 	{
 		if (m_index.x == m_majorSize - 1 && m_index.y == m_rowSize-1)
@@ -58,12 +41,6 @@ public:
 
 		stopwatch.start();
 		const double time = stopwatch.sF();
-
-		if (m_audioFlag && m_audio)
-		{
-			m_audio.playOneShot();
-			m_audioFlag = false;
-		}
 
 		if (time > m_frmTime)
 		{
@@ -102,26 +79,27 @@ public:
 
 private:
 
+	/// @brief スプライトシートです
 	Texture m_texture;
 
-	Audio m_audio;
-
+	/// @brief スプライトシートのコマの列数です
 	int32 m_majorSize = 0;
 
+	/// @brief スプライトシートのコマの行数です
 	int32 m_rowSize = 0;
 
+	/// @brief １コマの描画時間です(秒)
 	double m_frmTime = 0;
 
+	/// @brief テクスチャの表示倍率です
 	double m_resize = 1.0;
 
-	//音声を１回だけ鳴らすためのフラグ変数です
-	bool m_audioFlag = true;
-
-	//表示するコマの{列、行}です
+	/// @brief 表示するコマの{列、行}です
 	Point m_index = { 0,0 };
 
-	//すべてのコマを表示後このコマから再開します
+	/// @brief ループ再生の開始場所です
 	Point m_reStartIndex = { 0,0 };
 
+	/// @brief アニメーションの経過時間を計測します
 	Stopwatch stopwatch{ StartImmediately::No };
 };

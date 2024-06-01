@@ -1,4 +1,5 @@
 ﻿#include "Enemy.hpp"
+#include "Volume.hpp"
 
 Enemy::Enemy(double r, double theta)
 {
@@ -16,7 +17,7 @@ Enemy::Enemy(double r, double theta)
 
 void Enemy::draw() const
 {
-	if (m_currentHP <= 0)
+	if (m_isDead)
 	{
 		const ScopedRenderStates2D blend{ BlendState::Additive };
 		m_explosionAnime.drawAt(OffsetCircular({ 0,0 }, m_position.r, m_position.theta));
@@ -29,10 +30,16 @@ void Enemy::draw() const
 
 void Enemy::update()
 {
-	//死亡アニメーションが終了したら死亡フラグをたてる
-	if (m_currentHP <= 0)
+	//死亡時に１度だけ撃破音を再生
+	if (m_isDead && !m_wasDead)
 	{
-		m_deadFlag = m_explosionAnime.update();
+		AudioAsset(U"enemyDead").playOneShot(Volume::EnemyDestroy);
+	}
+
+	//死亡アニメーションが終了したら死亡フラグをたてる
+	if (m_isDead)
+	{
+		m_readyToDelete = m_explosionAnime.update();
 	}
 	
 	//移動
@@ -40,12 +47,15 @@ void Enemy::update()
 	m_position.r = Math::Lerp(m_from.r, m_to.r, t);
 	m_position.theta = Math::LerpAngle(m_from.theta, m_to.theta, t);
 	m_collider.setPos(m_position);
+
+	//死亡フラグを更新
+	m_wasDead = m_isDead;
 }
 
-bool Enemy::damage(double damage)
+void Enemy::damage(double damage)
 {
 	m_currentHP -= damage;
-	return m_currentHP <= 0;
+	m_isDead = (m_currentHP <= 0);
 }
 
 double Enemy::getHP() const
@@ -95,7 +105,12 @@ Circle Enemy::getCollider() const
 
 bool Enemy::isDead() const
 {
-	return m_deadFlag;
+	return m_isDead;
+}
+
+bool Enemy::isReadyToDelete() const
+{
+	return m_readyToDelete;
 }
 
 Circular Enemy::getCenter() const
