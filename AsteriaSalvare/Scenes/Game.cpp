@@ -142,7 +142,7 @@ void Game::update()
 			//プレイヤーの弾と敵の衝突処理
 			for (auto it = playerBulletArray.begin(); it != playerBulletArray.end();)
 			{
-				if (enemy.getCollider().intersects(it->collider))
+				if (enemy.getCollider().intersects(it->collider) && not enemy.isDead())
 				{
 					switch (it->type)
 					{
