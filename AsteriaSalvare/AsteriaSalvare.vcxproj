@@ -348,7 +348,6 @@
     <ClInclude Include="Stage\StageInfo.hpp" />
     <ClInclude Include="Stage\Town.hpp" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="UIGameScene.hpp" />
     <ClInclude Include="Utils\Anime.hpp" />
     <ClInclude Include="Utils\AssetReader.hpp" />
     <ClInclude Include="Utils\HPBar.h" />

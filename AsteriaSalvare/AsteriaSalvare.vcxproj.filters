@@ -899,9 +899,6 @@
     <ClInclude Include="Volume.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIGameScene.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\InputManager.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
