@@ -129,13 +129,20 @@ void Game::update()
 	m_enemyManager.processEnemyCollisions([this](Enemy& enemy) -> double
 		{
 			//プレイヤーと敵の衝突処理
-			if (enemy.getCollider().intersects(player.getCollider()))
+			if (enemy.getCollider().intersects(player.getCollider()) && not enemy.isDead())
 			{
 				if (!getData().testMode)
 				{
 					player.damage(EnemyBullet::damage);
 				}
 
+				return PlayerBullet::damage;
+			}
+
+			//シールドと敵の衝突処理
+			if (enemy.getCollider().intersects(player.getShieldCollider()) && not enemy.isDead())
+			{
+				player.shieldDamage(EnemyBullet::damage);
 				return PlayerBullet::damage;
 			}
 	
