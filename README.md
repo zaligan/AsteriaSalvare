@@ -1,5 +1,5 @@
 # AsteriaSalvare
-このリポジトリはSiv3D(v0.6.14)を使用して作成したゲーム作品です。
+このリポジトリはSiv3D(v0.6.14)を使用して作成したゲーム作品です。  
 
 **ジャンル**：シューティングディフェンス  
 **プレイ人数**：１人  
@@ -37,6 +37,11 @@
   シールドの耐久値を使い切った際に１つ消費することで耐久値を全回復します。
 - 特殊効果アイテム(未実装)
 
+## 制作
+- 製作人数　１人
+- Utils/HPBar.hは以下のコードを利用させていただきました。  
+  https://github.com/Siv3D/Siv3D-Samples/tree/main/Samples/HPBar
+  
 ## プレイ映像
 https://github.com/zaligan/AsteriaSalvare/assets/132348777/1da4c03f-97bd-432e-8987-60d10404cb6c
 
