@@ -39,9 +39,17 @@
 
 ## 制作
 - 製作人数　１人
-- Utils/HPBar.hは以下のコードを利用させていただきました。  
+### 制作箇所
+コード
+- Characters,Item,Scenes,Stage,Utilsフォルダ内のコード
+- Main.cpp,Volume.hpp
+- Utils\HPBar.hは以下のコードを利用させていただきました。  
   https://github.com/Siv3D/Siv3D-Samples/tree/main/Samples/HPBar
-  
+
+画像ファイル
+- タイトル画面(App\picture\Title\AsteriaSalvare_TitlePic.png)
+- ゲーム背景(App\picture\StarryBackPic.png)
+
 ## プレイ映像
 https://github.com/zaligan/AsteriaSalvare/assets/132348777/1da4c03f-97bd-432e-8987-60d10404cb6c
 
