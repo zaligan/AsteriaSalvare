@@ -15,8 +15,7 @@ public:
 	Player();
 
 	/// @brief フレーム時間に合わせて更新します
-	/// @param deltaTime フレーム時間を渡します
-	void update(double deltaTime);
+	void update();
 
 	/// @brief プレイヤーを描画します
 	void draw() const;
@@ -101,9 +100,6 @@ private:
 
 	/// @brief シールドです
 	Shield m_shield;
-
-	/// @brief 前フレームからの経過時間です
-	double m_deltaTime = 0;
 
 	/// @brief プレイヤーの中心座標(半径、回転角)です
 	Circular m_position{ StageInfo::stageRadius,0 };

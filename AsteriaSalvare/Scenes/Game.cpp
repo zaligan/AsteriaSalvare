@@ -1,9 +1,17 @@
 ﻿#include "Game.hpp"
 
+using namespace Util;
+
 // ゲームシーン
 Game::Game(const InitData& init)
 	: IScene{ init }
 {
+	//シーン開始時、時間をリセット
+	resetSceneTime();
+	startSceneTimeCounter();
+
+	//操作説明を閉じるまで時間を止める
+	pauseDeltaTime();
 }
 
 void Game::update()
@@ -54,16 +62,14 @@ void Game::update()
 		if (shotInput.pressed())
 		{
 			showInstructionsFlag = false;
+			resumeDeltaTime();
 		}
 		return;
 	}
 
-	//時間管理
-	deltaTime = Scene::DeltaTime();
-	sceneTime += deltaTime;
 
 	//状況に応じてゲームの状態を変更
-	if (sceneTime > clearTime && !getData().testMode)
+	if (getSceneTime() > clearTime && !getData().testMode)
 	{
 		gameState = GameState::clear;
 	}
@@ -98,7 +104,7 @@ void Game::update()
 	
 	moveInput = Vec2{ Clamp(moveInput.x ,-1.0,1.0) ,Clamp(moveInput.y ,-1.0,1.0) };
 	player.move(moveInput);
-	player.update(deltaTime);
+	player.update();
 
 	//攻撃orシールド展開
 	player.setShieldActive(shieldInput.pressed());
@@ -113,7 +119,7 @@ void Game::update()
 	for (auto it = playerBulletArray.begin(); it != playerBulletArray.end();)
 	{
 		//移動
-		Vec2 update(it->direction * PlayerBullet::speed * deltaTime);
+		Vec2 update(it->direction * PlayerBullet::speed * getDeltaTime());
 		Line trajectory{ it->collider.center,it->collider.center + update };
 		it->collider.setCenter(it->collider.center + update);
 
@@ -184,13 +190,13 @@ void Game::update()
 		});
 
 	//敵の更新
-	m_enemyManager.update(deltaTime);
+	m_enemyManager.update();
 
 	//倒した敵からアイテムをドロップ
 	m_itemManager.dropEnemyItem(m_enemyManager.getDeadEnemyPosition());
 
 	//ステージ上のアイテムを更新
-	m_itemManager.update(deltaTime);
+	m_itemManager.update();
 		
 	//敵の弾と他オブジェクトの衝突処理
 	m_enemyManager.processBulletCollisions([this](Bullet& bullet) -> bool
@@ -258,7 +264,7 @@ void Game::update()
 	//town更新
 	for (size_t i = 0; i < townArray.size(); ++i)
 	{
-		townArray.at(i).update(deltaTime);
+		townArray.at(i).update();
 		townArray[i].shot(playerBulletArray);
 	}
 
@@ -375,7 +381,7 @@ void Game::draw() const
 	}
 
 	//残り時間
-	FontAsset(U"townHPFont")(U"{:.0f}"_fmt(Max(0.0, clearTime - sceneTime) )).drawAt(80,Scene::Center().x, 80);
+	FontAsset(U"townHPFont")(U"{:.0f}"_fmt(Max(0.0, clearTime - getSceneTime()) )).drawAt(80,Scene::Center().x, 80);
 
 
 	//プレイヤー強化

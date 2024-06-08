@@ -129,6 +129,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Utils\AssetReader.cpp" />
+    <ClCompile Include="Utils\TimeUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -352,6 +353,7 @@
     <ClInclude Include="Utils\AssetReader.hpp" />
     <ClInclude Include="Utils\HPBar.h" />
     <ClInclude Include="Utils\InputManager.hpp" />
+    <ClInclude Include="Utils\TimeUtil.hpp" />
     <ClInclude Include="Volume.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -64,12 +64,6 @@ private:
 	/// @brief クリアまでの制限時間
 	static constexpr double clearTime = 110.0;
 
-	/// @brief 前フレームからの経過時間
-	double deltaTime = 0.0;
-
-	/// @brief 操作説明を閉じてからの合計時間
-	double sceneTime = 0.0;
-
 
 	/// @brief プレイヤーを作成します
 	Player player;

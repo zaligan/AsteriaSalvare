@@ -3,6 +3,9 @@
 #include "Title.hpp" // タイトルシーン
 #include "Game.hpp" // ゲームシーン
 #include "AssetReader.hpp"	//アセットを読み込むクラス
+#include "TimeUtil.hpp" //時間のスケールを変更するクラス
+
+using namespace Util;
 
 void Main()
 {
@@ -50,6 +53,9 @@ void Main()
 	//メインループ
 	while (System::Update())
 	{
+		//TimeUtilを更新
+		updateTimeUtil();
+
 		//シーンに実装された.update() 次に.draw()の順で実行される
 		if (not manager.update())
 		{

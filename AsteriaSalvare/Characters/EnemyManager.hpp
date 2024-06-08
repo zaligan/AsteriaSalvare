@@ -11,8 +11,7 @@ public:
 	EnemyManger(const Player& player, double clearTime);
 
 	/// @brief EnemyManagerを更新します
-	/// @param deltaTime 前フレームからの経過時間を渡します
-	void update(double deltaTime);
+	void update();
 
 	/// @brief 敵を描画します
 	void enemyDraw() const; 
@@ -50,12 +49,6 @@ private:
 
 	/// @brief クリアまでの制限時間です
 	double m_clearTime;
-
-	/// @brief 前フレームからの経過時間です
-	double m_deltaTime = 0;
-
-	/// @brief ゲームシーン開始からの経過時間です
-	double m_sceneTime = 0;
 
 	/// @brief 敵の配列です
 	Array <Enemy> m_enemyArray;

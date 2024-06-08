@@ -1,14 +1,14 @@
 ﻿#include "EnemyManager.hpp"
+#include "TimeUtil.hpp"
+
+using namespace Util;
 
 EnemyManger::EnemyManger(const Player& player, double clearTime) : m_player(player), m_clearTime(clearTime)
 {
 }
 
-void EnemyManger::update(double deltaTime)
+void EnemyManger::update()
 {
-	m_deltaTime = deltaTime;
-	m_sceneTime += deltaTime;
-
 	//敵の生成
 	spawnEnemy();
 
@@ -75,11 +75,11 @@ Array<Vec2> EnemyManger::getDeadEnemyPosition()
 void EnemyManger::spawnEnemy()
 {
 	//ランダムスポーン
-	m_spawnTimer += m_deltaTime;
+	m_spawnTimer += getDeltaTime();
 	if (m_spawnTimer > m_spawnIntervalSeconds)
 	{
 		m_spawnTimer -= m_spawnIntervalSeconds;
-		for (int i : step(enemySpawnCalk(m_sceneTime)))
+		for (int i : step(enemySpawnCalk(getSceneTime())))
 		{
 			const double r = Random(m_minSpawnR, m_maxSpawnR);
 			const double theta = Math::ToRadians(Random(m_minSpawnTheta, m_maxSpawnTheta));
@@ -93,7 +93,7 @@ void EnemyManger::bulletUpdate()
 	//移動
 	for (auto& bullet : m_enemyBulletArray)
 	{
-		Vec2 move(bullet.direction * EnemyBullet::speed * m_deltaTime);
+		Vec2 move(bullet.direction * EnemyBullet::speed * getDeltaTime());
 		bullet.collider.setCenter(bullet.collider.center + move);
 	}
 

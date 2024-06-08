@@ -183,6 +183,9 @@
     <ClCompile Include="Characters\Player.cpp">
       <Filter>Source Files\Charactors</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\TimeUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -900,6 +903,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils\InputManager.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TimeUtil.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

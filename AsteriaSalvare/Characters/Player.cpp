@@ -1,12 +1,14 @@
 ﻿#include "Player.hpp"
+#include "TimeUtil.hpp"
+
+using namespace Util;
 
 Player::Player() : m_shield(*this)
 {}
 
-void Player::update(double deltaTime)
+void Player::update()
 {
-	m_deltaTime = deltaTime;
-	m_shotTimer += m_deltaTime;
+	m_shotTimer += getDeltaTime();
 	m_shield.update();
 	m_collider.setCenter(m_position);
 
@@ -46,8 +48,8 @@ void Player::draw() const
 
 void Player::move(Vec2 moveInput)
 {
-	m_position.r += m_vertSpeed * m_deltaTime * moveInput.y;
-	m_position.theta += 2 * Math::Pi * m_deltaTime / (m_maxRotateSpeed + ((m_minRotateSpeed - m_maxRotateSpeed) * ((getR() - m_moveRange.minRadius) / (m_moveRange.maxRadius - m_moveRange.minRadius)))) * moveInput.x;
+	m_position.r += m_vertSpeed * getDeltaTime() * moveInput.y;
+	m_position.theta += 2 * Math::Pi * getDeltaTime() / (m_maxRotateSpeed + ((m_minRotateSpeed - m_maxRotateSpeed) * ((getR() - m_moveRange.minRadius) / (m_moveRange.maxRadius - m_moveRange.minRadius)))) * moveInput.x;
 	m_position.r = Clamp(m_position.r, m_moveRange.minRadius, m_moveRange.maxRadius);
 }
 

@@ -3,6 +3,9 @@
 #include "StageInfo.hpp"
 #include "HPBar.h"
 #include "Item.hpp"
+#include "TimeUtil.hpp"
+
+using namespace Util;
 
 //TODO:街のタイプに合わせたアップグレードを実装する
 /// @brief 街の種類
@@ -30,9 +33,9 @@ public:
 		m_collider.setCenter(pos);
 	}
 
-	void update(double deltaTime)
+	void update()
 	{
-		m_attackTimer += deltaTime;
+		m_attackTimer += getDeltaTime();
 		m_hPBar.update();
 		m_attackLevel = Min(5, m_upgradeItem[ItemType::AttackUpgrade] / m_attackItemsNeeded);
 	}
@@ -149,13 +152,4 @@ private:
 
 	/// @brief 弾の半径
 	static constexpr double m_bulletR = 10.0;
-
-	/// @brief シールドの最大HP
-	static constexpr double m_maxShieldHP = 100;
-
-	/// @brief 現在のシールドHP
-	double m_currentShieldHP = m_maxShieldHP;
-
-	/// @brief 前回のフレームで経過した時間
-	double m_deltaTime = 0;
 };

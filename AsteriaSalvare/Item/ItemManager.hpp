@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
 #include "Item.hpp"
+#include "TimeUtil.hpp"
+
+using namespace Util;
 
 /// @brief アイテムの管理を行うクラスです
 class ItemManager
@@ -9,15 +12,14 @@ public:
 	ItemManager(){}
 
 	/// @brief ステージ上アイテムの更新を行います
-	/// @param deltaTime 前フレームからの経過時間
-	void update(double deltaTime)
+	void update()
 	{
 		for (auto& item : m_stageItemArray)
 		{
 			//アイテムの移動
 			if (item.position.r > StageInfo::stageRadius)
 			{
-				item.position.r -= itemDropSpeed * deltaTime;
+				item.position.r -= itemDropSpeed * getDeltaTime();
 			}
 		}
 	}
