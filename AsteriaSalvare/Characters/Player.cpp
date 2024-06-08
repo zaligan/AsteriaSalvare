@@ -144,9 +144,9 @@ void Player::shieldDamage(double damage)
 	m_shield.damage(damage);
 }
 
-void Player::addEnhancePoint(double addPoint)
+void Player::addEnhancePoint(double damage)
 {
-	m_enhancePoint += addPoint;
+	m_enhancePoint += damage * m_damageToEnhanceRate;
 }
 
 HashTable<ItemType, int32> Player::getItemCollection() const

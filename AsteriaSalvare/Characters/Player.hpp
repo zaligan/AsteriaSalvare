@@ -68,7 +68,9 @@ public:
 
 	void shieldDamage(double damage);
 
-	void addEnhancePoint(double addPoint);
+	/// @brief シールドで受けたダメージを強化値に加算します
+	/// @param damage 受けたダメージ量
+	void addEnhancePoint(double damage);
 
 	/// @brief 所持アイテム数を返します
 	/// @return 所持しているアイテム数
@@ -146,6 +148,9 @@ private:
 
 	/// @brief m_enhancePointがこの値を超えると強化状態
 	double m_enhanceThreshold = 30;
+
+	/// @brief シールドで受けたダメージ量を強化値に換算する割合です
+	static constexpr double m_damageToEnhanceRate = 0.1;
 
 	/// @brief 攻撃１発ごとに減る強化値の量です
 	static constexpr double m_shotLostEnhancePoint = 10.0;

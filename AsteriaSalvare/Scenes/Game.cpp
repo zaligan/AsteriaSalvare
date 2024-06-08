@@ -205,7 +205,7 @@ void Game::update()
 			if (player.isShieldActive() && bullet.collider.intersects(player.getShieldCollider()))
 			{
 				player.shieldDamage(EnemyBullet::damage);
-				player.addEnhancePoint(EnemyBullet::damage / 10);
+				player.addEnhancePoint(EnemyBullet::damage);
 				return true;
 			}
 
