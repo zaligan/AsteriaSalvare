@@ -33,20 +33,20 @@ void Game::update()
 	AudioAsset(U"gameBgm").play();
 
 	//ゲームの状態遷移
-	switch (gameState)
+	switch (m_gameState)
 	{
 	case GameState::play:
 		break;
 
 	case GameState::gameOver:
-		if (shotInput.down())
+		if (m_shotInput.down())
 		{
 			changeScene(State::Title);
 		}
 		return;
 
 	case GameState::clear:
-		if (shotInput.down())
+		if (m_shotInput.down())
 		{
 			changeScene(State::Title);
 		}
@@ -57,11 +57,11 @@ void Game::update()
 	}
 
 	//ゲームシーンになった時、操作方法を表示
-	if(showInstructionsFlag && !getData().testMode)
+	if(m_showInstructionsFlag && !getData().testMode)
 	{
-		if (shotInput.pressed())
+		if (m_shotInput.pressed())
 		{
-			showInstructionsFlag = false;
+			m_showInstructionsFlag = false;
 			resumeDeltaTime();
 		}
 		return;
@@ -69,54 +69,54 @@ void Game::update()
 
 
 	//状況に応じてゲームの状態を変更
-	if (getSceneTime() > clearTime && !getData().testMode)
+	if (getSceneTime() > m_clearTime && !getData().testMode)
 	{
-		gameState = GameState::clear;
+		m_gameState = GameState::clear;
 	}
-	if (player.getHP() <= 0)
+	if (m_player.getHP() <= 0)
 	{
-		gameState = GameState::gameOver;
+		m_gameState = GameState::gameOver;
 	}
 
 
 	//----------------プレイヤー----------------
 
 	//操作入力
-	moveInput = { 0,0 };
-	if (rightInput.pressed())
+	m_moveInput = { 0,0 };
+	if (m_rightInput.pressed())
 	{
-		moveInput.x += 1.0;
+		m_moveInput.x += 1.0;
 	}
-	if (leftInput.pressed())
+	if (m_leftInput.pressed())
 	{
-		moveInput.x -= 1.0;
+		m_moveInput.x -= 1.0;
 	}
-	if (upInput.pressed())
+	if (m_upInput.pressed())
 	{
-		moveInput.y += 1.0;
+		m_moveInput.y += 1.0;
 	}
-	if (downInput.pressed())
+	if (m_downInput.pressed())
 	{
-		moveInput.y += -1.0;
+		m_moveInput.y += -1.0;
 	}
-	moveInput.x += XInput(0).leftThumbX;
-	moveInput.y += XInput(0).leftThumbY;
+	m_moveInput.x += XInput(0).leftThumbX;
+	m_moveInput.y += XInput(0).leftThumbY;
 	
-	moveInput = Vec2{ Clamp(moveInput.x ,-1.0,1.0) ,Clamp(moveInput.y ,-1.0,1.0) };
-	player.move(moveInput);
-	player.update();
+	m_moveInput = Vec2{ Clamp(m_moveInput.x ,-1.0,1.0) ,Clamp(m_moveInput.y ,-1.0,1.0) };
+	m_player.move(m_moveInput);
+	m_player.update();
 
 	//攻撃orシールド展開
-	player.setShieldActive(shieldInput.pressed());
+	m_player.setShieldActive(m_shieldInput.pressed());
 
-	if (shotInput.pressed() && !shieldInput.pressed())
+	if (m_shotInput.pressed() && !m_shieldInput.pressed())
 	{
-		player.shot(playerBulletArray);
+		m_player.shot(m_playerBulletArray);
 	}
 	
 
 	//弾の更新
-	for (auto it = playerBulletArray.begin(); it != playerBulletArray.end();)
+	for (auto it = m_playerBulletArray.begin(); it != m_playerBulletArray.end();)
 	{
 		//移動
 		Vec2 update(it->direction * PlayerBullet::speed * getDeltaTime());
@@ -126,7 +126,7 @@ void Game::update()
 		//弾自身が範囲外なら削除
 		if (it->collider.x < -StageInfo::bulletDeleteRange || StageInfo::bulletDeleteRange < it->collider.x || it->collider.y < -StageInfo::bulletDeleteRange || it->collider.y > StageInfo::bulletDeleteRange)
 		{
-			it = playerBulletArray.erase(it);
+			it = m_playerBulletArray.erase(it);
 			continue;
 		}
 		it++;
@@ -135,32 +135,32 @@ void Game::update()
 	m_enemyManager.processEnemyCollisions([this](Enemy& enemy) -> double
 		{
 			//プレイヤーと敵の衝突処理
-			if (enemy.getCollider().intersects(player.getCollider()) && not enemy.isDead())
+			if (enemy.getCollider().intersects(m_player.getCollider()) && not enemy.isDead())
 			{
 				if (!getData().testMode)
 				{
-					player.damage(EnemyBullet::damage);
+					m_player.damage(EnemyBullet::damage);
 				}
 
 				return PlayerBullet::damage;
 			}
 
 			//シールドと敵の衝突処理
-			if (enemy.getCollider().intersects(player.getShieldCollider()) && not enemy.isDead())
+			if (enemy.getCollider().intersects(m_player.getShieldCollider()) && not enemy.isDead())
 			{
-				player.shieldDamage(EnemyBullet::damage);
+				m_player.shieldDamage(EnemyBullet::damage);
 				return PlayerBullet::damage;
 			}
 	
 			//プレイヤーの弾と敵の衝突処理
-			for (auto it = playerBulletArray.begin(); it != playerBulletArray.end();)
+			for (auto it = m_playerBulletArray.begin(); it != m_playerBulletArray.end();)
 			{
 				if (enemy.getCollider().intersects(it->collider) && not enemy.isDead())
 				{
 					switch (it->type)
 					{
 						case BulletType::Normal:
-							it = playerBulletArray.erase(it);
+							it = m_playerBulletArray.erase(it);
 							return PlayerBullet::damage;
 							
 						case BulletType::Enhanced:
@@ -173,7 +173,7 @@ void Game::update()
 							break;
 
 						case BulletType::Town:
-							it = playerBulletArray.erase(it);
+							it = m_playerBulletArray.erase(it);
 							return PlayerBullet::damage;
 
 						default:
@@ -202,31 +202,31 @@ void Game::update()
 	m_enemyManager.processBulletCollisions([this](Bullet& bullet) -> bool
 		{
 			//シールドと敵の弾の衝突処理
-			if (player.isShieldActive() && bullet.collider.intersects(player.getShieldCollider()))
+			if (m_player.isShieldActive() && bullet.collider.intersects(m_player.getShieldCollider()))
 			{
-				player.shieldDamage(EnemyBullet::damage);
-				player.addEnhancePoint(EnemyBullet::damage);
+				m_player.shieldDamage(EnemyBullet::damage);
+				m_player.addEnhancePoint(EnemyBullet::damage);
 				return true;
 			}
 
 			//プレイヤーと敵の弾の衝突処理
-			if (bullet.collider.intersects(player.getCollider()))
+			if (bullet.collider.intersects(m_player.getCollider()))
 			{
 				if (!getData().testMode)
 				{
-					player.damage(EnemyBullet::damage);
+					m_player.damage(EnemyBullet::damage);
 				}
 				return true;
 			}
 
 			//街と敵の弾の衝突処理
-			for (auto i : step(townArray.size()))
+			for (auto i : step(m_townArray.size()))
 			{
-				if (bullet.collider.intersects(townArray[i].getCollider()))
+				if (bullet.collider.intersects(m_townArray[i].getCollider()))
 				{
 					if (!getData().testMode)
 					{
-						townArray[i].damage(EnemyBullet::damage);
+						m_townArray[i].damage(EnemyBullet::damage);
 					}
 					return true;
 				}
@@ -244,36 +244,36 @@ void Game::update()
 		//衝突判定（プレイヤー）
 		Vec2 rectPos = OffsetCircular({ 0,0 }, it->position);
 		Rect collider{ Arg::center(lround(rectPos.x),lround(rectPos.y)) ,20,20 };
-		if (collider.intersects(player.getCollider()))
+		if (collider.intersects(m_player.getCollider()))
 		{
-			player.addOnePointUpgrade(it->itemType);
+			m_player.addOnePointUpgrade(it->itemType);
 			it = itemArray.erase(it);
 			continue;
 		}
 		it++;
 	}
-	for (auto& town:townArray)
+	for (auto& town:m_townArray)
 	{
-		if (town.getCollider().intersects(player.getCollider()))
+		if (town.getCollider().intersects(m_player.getCollider()))
 		{
-			town.addUpgrade(player.getUpgradeCnt(),ItemType::AttackUpgrade);
-			player.resetUpgrade(ItemType::AttackUpgrade);
+			town.addUpgrade(m_player.getUpgradeCnt(),ItemType::AttackUpgrade);
+			m_player.resetUpgrade(ItemType::AttackUpgrade);
 		}
 	}
 	
 	//town更新
-	for (size_t i = 0; i < townArray.size(); ++i)
+	for (size_t i = 0; i < m_townArray.size(); ++i)
 	{
-		townArray.at(i).update();
-		townArray[i].shot(playerBulletArray);
+		m_townArray.at(i).update();
+		m_townArray[i].shot(m_playerBulletArray);
 	}
 
 	//Town処理
-	for (auto& town : townArray)
+	for (auto& town : m_townArray)
 	{
 		if (town.getHP() <= 0)
 		{
-			gameState = GameState::gameOver;
+			m_gameState = GameState::gameOver;
 		}
 	}
 
@@ -281,20 +281,20 @@ void Game::update()
 	//------------------カメラ計算------------------
 	
 	//引数の座標はゲーム内ではなく、回転の処理をした後、スケールを変える前の画面上座標
-	camera.setTargetCenter(Circular{player.getR() + cameraOffsetY,0});
+	m_camera.setTargetCenter(Circular{m_player.getR() + m_cameraOffsetY,0});
 
-	if (player.getR()< StageInfo::stageRadius)
+	if (m_player.getR()< StageInfo::stageRadius)
 	{
-		camera.setTargetScale(cameraScale * (1 - 0.65 * ((StageInfo::stageRadius - player.getR()) / StageInfo::stageRadius)));
+		m_camera.setTargetScale(m_cameraScale * (1 - 0.65 * ((StageInfo::stageRadius - m_player.getR()) / StageInfo::stageRadius)));
 	}
 	else
 	{
-		camera.setTargetScale(cameraScale);
+		m_camera.setTargetScale(m_cameraScale);
 	}
 	
 
-	mat = Mat3x2::Rotate(-player.getTheta(), {0,0});
-	camera.update();
+	m_mat = Mat3x2::Rotate(-m_player.getTheta(), {0,0});
+	m_camera.update();
 }
 
 
@@ -304,8 +304,8 @@ void Game::draw() const
 {
 	{
 		// 2D カメラの設定から Transformer2D を作成
-		const auto t0 = camera.createTransformer();
-		const Transformer2D t1{ mat,TransformCursor::Yes };
+		const auto t0 = m_camera.createTransformer();
+		const Transformer2D t1{ m_mat,TransformCursor::Yes };
 
 		//背景
 		TextureAsset(U"gameBackGround").scaled(1.0).drawAt(0, 0);
@@ -319,22 +319,22 @@ void Game::draw() const
 		}
 
 		//街
-		for (int32 i:step(townArray.size()))
+		for (int32 i:step(m_townArray.size()))
 		{
-			double townRotate = Math::ToRadians(i * (360/townArray.size()));
-			switch (townArray[i].getTownType())
+			double townRotate = Math::ToRadians(i * (360/m_townArray.size()));
+			switch (m_townArray[i].getTownType())
 			{
 			case TownType::Normal:
-				TextureAsset(U"normalTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
+				TextureAsset(U"normalTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + m_townPosOffset.r, townRotate + m_townPosOffset.theta));
 				break;
 			case TownType::Attack:
-				TextureAsset(U"attackTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
+				TextureAsset(U"attackTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + m_townPosOffset.r, townRotate + m_townPosOffset.theta));
 				break;
 			case TownType::Defense:
-				TextureAsset(U"defenseTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
+				TextureAsset(U"defenseTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + m_townPosOffset.r, townRotate + m_townPosOffset.theta));
 				break;
 			case TownType::Special:
-				TextureAsset(U"specialTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + townPosOffset.r, townRotate + townPosOffset.theta));
+				TextureAsset(U"specialTown").scaled(0.2).rotated(townRotate).drawAt(Circular(StageInfo::stageRadius + m_townPosOffset.r, townRotate + m_townPosOffset.theta));
 				break;
 			default:
 				throw Error(U"街のタイプが正しくないため描画できません");
@@ -343,24 +343,24 @@ void Game::draw() const
 		}
 
 		//プレイヤー
-		player.draw();
+		m_player.draw();
 
 		//p弾
-		for (auto& bullet : playerBulletArray)
+		for (auto& bullet : m_playerBulletArray)
 		{
 			switch (bullet.type)
 			{
 			case BulletType::Normal:
-				TextureAsset(U"playerBullet").rotated(player.getTheta()).drawAt(bullet.collider.center);
+				TextureAsset(U"playerBullet").rotated(m_player.getTheta()).drawAt(bullet.collider.center);
 				break;
 			case BulletType::Enhanced:
-				TextureAsset(U"playerEnhancedBullet").rotated(player.getTheta()-90_deg).drawAt(bullet.collider.center);
+				TextureAsset(U"playerEnhancedBullet").rotated(m_player.getTheta()-90_deg).drawAt(bullet.collider.center);
 				break;
 			case BulletType::Town:
-				TextureAsset(U"playerBullet").rotated(player.getTheta()).drawAt(bullet.collider.center);
+				TextureAsset(U"playerBullet").rotated(m_player.getTheta()).drawAt(bullet.collider.center);
 				break;
 			default:
-				TextureAsset(U"townTex").rotated(player.getTheta()).drawAt(bullet.collider.center);
+				TextureAsset(U"townTex").rotated(m_player.getTheta()).drawAt(bullet.collider.center);
 				break;
 			}
 		}
@@ -375,13 +375,13 @@ void Game::draw() const
 
 	//-------UI------------
 	//遊び方
-	if (showInstructionsFlag && !getData().testMode)
+	if (m_showInstructionsFlag && !getData().testMode)
 	{
 		TextureAsset(U"howToPlayTex").scaled(1.3).drawAt(Scene::Center());
 	}
 
 	//残り時間
-	FontAsset(U"townHPFont")(U"{:.0f}"_fmt(Max(0.0, clearTime - getSceneTime()) )).drawAt(80,Scene::Center().x, 80);
+	FontAsset(U"townHPFont")(U"{:.0f}"_fmt(Max(0.0, m_clearTime - getSceneTime()) )).drawAt(80,Scene::Center().x, 80);
 
 
 	//プレイヤー強化
@@ -392,13 +392,13 @@ void Game::draw() const
 		switch (i)
 		{
 		case 0:
-			FontAsset(U"townHPFont")(player.getUpgradeCnt()[ItemType::AttackUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
+			FontAsset(U"townHPFont")(m_player.getUpgradeCnt()[ItemType::AttackUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
 			break;
 		case 1:
-			FontAsset(U"townHPFont")(player.getUpgradeCnt()[ItemType::ShieldUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
+			FontAsset(U"townHPFont")(m_player.getUpgradeCnt()[ItemType::ShieldUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
 			break;
 		case 2:
-			FontAsset(U"townHPFont")(player.getUpgradeCnt()[ItemType::SpecialUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
+			FontAsset(U"townHPFont")(m_player.getUpgradeCnt()[ItemType::SpecialUpgrade]).drawAt(860 + 100 * i, 980, Palette::Blue);
 			break;
 		default:
 			break;
@@ -411,12 +411,12 @@ void Game::draw() const
 	//街のHP
 	double interval = 180;
 	Array<String> townNameArr = { U"普通の街 HP",U"攻撃の街 HP" ,U"防御の街 HP" ,U"特殊の街 HP" };
-	for (int i = 0; i < townArray.size(); i++)
+	for (int i = 0; i < m_townArray.size(); i++)
 	{
 		RoundRect{ i*interval + 600,1020,180,60,10 }.draw(Palette::Gray);
 		FontAsset(U"townHPFont")(townNameArr.at(i)).drawAt(i * interval + 690, 1030);
 
-		switch (townArray[i].getTownType())
+		switch (m_townArray[i].getTownType())
 		{
 		case TownType::Normal:
 			TextureAsset(U"normalTown").scaled(0.08).drawAt(620,1020);
@@ -435,16 +435,16 @@ void Game::draw() const
 			break;
 		}
 	}
-	for (size_t i = 0; i < townArray.size(); i++)
+	for (size_t i = 0; i < m_townArray.size(); i++)
 	{
 		const double x = interval * i;
 		const double y = 0;
 		const RectF rect = RectF{ x, y, 150, 16 }.movedBy(615, 1050);
-		townArray.at(i).drawHPBar(rect);
+		m_townArray.at(i).drawHPBar(rect);
 	}
 
 	//GameOver
-	switch (gameState)
+	switch (m_gameState)
 	{
 	case GameState::play:
 		break;
