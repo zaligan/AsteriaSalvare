@@ -146,6 +146,11 @@ void Player::shieldDamage(double damage)
 
 void Player::addEnhancePoint(double damage)
 {
+	if (m_maxEnhancePoint <= m_enhancePoint)
+	{
+		return;
+	}
+
 	m_enhancePoint += damage * m_damageToEnhanceRate;
 }
 
@@ -177,6 +182,16 @@ HashTable<ItemType, int32> Player::getUpgradeCnt() const
 bool Player::isEnhanced()
 {
 	return m_isEnhanced;
+}
+
+double Player::getEnhancePoint() const
+{
+	return m_enhancePoint;
+}
+
+double Player::getMaxEnhancePoint() const
+{
+	return m_maxEnhancePoint;
 }
 
 void Player::resetEnhancePoint()
