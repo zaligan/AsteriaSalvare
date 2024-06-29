@@ -2,6 +2,40 @@
 
 using namespace Util;
 
+struct HitEvent
+{
+	size_t bulletIndex;
+
+	/// @brief 1:プレイヤー,,2:シールド
+	int32 hitType = 0;
+};
+
+//TODO:この関数を使用した衝突処理の実装を行う
+/// @brief 敵の弾とプレイヤーの衝突イベントを返します
+/// @param player プレイヤーの衝突範囲
+/// @param shield シールドの衝突範囲
+/// @param enemyBullets 敵の弾の配列
+/// @return 衝突した弾のインデックスと衝突したオブジェクトの種類
+Array<HitEvent> PlayerVsEnemyBullets(const Circle& player, const Circle& shield, const Array<Bullet>& enemyBullets)
+{
+	Array<HitEvent> result;
+
+	for (size_t i = 0; const auto& bullet : enemyBullets)
+	{
+		if (bullet.collider.intersects(player))
+		{
+			result.push_back(HitEvent{ i,1 });
+		}
+		else if (bullet.collider.intersects(shield))
+		{
+			result.push_back(HitEvent{ i,2 });
+		}
+		i++;
+	}
+	return result;
+}
+
+
 // ゲームシーン
 Game::Game(const InitData& init)
 	: IScene{ init }
@@ -29,7 +63,7 @@ void Game::update()
 #endif
 
 	//BGM再生
-	AudioAsset(U"gameBgm").setVolume(0.1);
+	AudioAsset(U"gameBgm").setVolume(Volume::gameBGM);
 	AudioAsset(U"gameBgm").play();
 
 	//ゲームの状態遷移
@@ -442,6 +476,8 @@ void Game::draw() const
 		const RectF rect = RectF{ x, y, 150, 16 }.movedBy(615, 1050);
 		m_townArray.at(i).drawHPBar(rect);
 	}
+
+	Quad{ {300,1030}, {300,1000}, {550,940}, {550,1030} }.draw(Palette::White);
 
 	//GameOver
 	switch (m_gameState)
