@@ -35,7 +35,10 @@ void Shield::update()
 
 void Shield::draw()	const
 {
-	if(not m_isActive) return;
+	if (not m_isActive)
+	{
+		return;
+	}
 
 	double hpRate = static_cast<double>(m_currentHP) / m_durabilityPerItem;
 	m_collider.draw(ColorF(HSV{ 244 * hpRate, 0.9, 1 }, 0.7 ));

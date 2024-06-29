@@ -24,7 +24,7 @@ namespace Util
 			s_deltaTime = 0;
 			return;
 		}
-		s_deltaTime = Scene::DeltaTime();
+		s_deltaTime = Scene::DeltaTime() * s_timeScale;
 
 		if (s_isSceneTimeCounting)
 		{

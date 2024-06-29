@@ -56,6 +56,8 @@ public:
 	/// @return プレイヤーの衝突範囲
 	Circle getCollider() const;
 
+	/// @brief シールドの衝突範囲を返します
+	/// @return シールドの衝突範囲
 	Circle getShieldCollider();
 
 	/// @brief シールドが使用中か返します
@@ -66,9 +68,11 @@ public:
 	/// @param isActive true の時シールドを展開、false の時シールドを収納します
 	void setShieldActive(bool isActive);
 
+	/// @brief シールドにダメージを与えます
+	/// @param damage ダメージ量
 	void shieldDamage(double damage);
 
-	/// @brief シールドで受けたダメージを強化値に加算します
+	/// @brief ダメージ量を強化値に換算して加算します
 	/// @param damage 受けたダメージ量
 	void addEnhancePoint(double damage);
 
@@ -95,6 +99,10 @@ public:
 	HashTable<ItemType, int32> getUpgradeCnt() const;
 
 	bool isEnhanced();
+
+	double getEnhancePoint() const;
+
+	double getMaxEnhancePoint() const;
 
 	void resetEnhancePoint();
 
@@ -147,13 +155,16 @@ private:
 	double m_enhancePoint = 0;
 
 	/// @brief m_enhancePointがこの値を超えると強化状態
-	double m_enhanceThreshold = 30;
+	static constexpr double m_enhanceThreshold = 30;
+
+	/// @brief 強化値の最大値です
+	static constexpr double m_maxEnhancePoint = 60;
 
 	/// @brief シールドで受けたダメージ量を強化値に換算する割合です
 	static constexpr double m_damageToEnhanceRate = 0.1;
 
 	/// @brief 攻撃１発ごとに減る強化値の量です
-	static constexpr double m_shotLostEnhancePoint = 10.0;
+	static constexpr double m_shotLostEnhancePoint = 5.0;
 
 	/// @brief プレイヤー強化時のエフェクトです
 	Anime m_enhanceEffectAnime{ Point(4,1), TextureAsset(U"enhancedEffect"), 3, 5, 0.04, 0.5 };

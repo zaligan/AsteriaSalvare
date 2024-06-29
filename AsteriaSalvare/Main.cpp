@@ -3,7 +3,7 @@
 #include "Title.hpp" // タイトルシーン
 #include "Game.hpp" // ゲームシーン
 #include "AssetReader.hpp"	//アセットを読み込むクラス
-#include "TimeUtil.hpp" //時間のスケールを変更するクラス
+#include "TimeUtil.hpp"
 
 using namespace Util;
 
@@ -47,7 +47,7 @@ void Main()
 	manager.init(State::Game);
 
 	//調整用無敵モード、通常プレイ時はコメントアウト
-	//manager.get()->testMode = true;
+	manager.get()->testMode = true;
 
 
 	//メインループ
